@@ -55,9 +55,12 @@
 
 ## 文件
 
+- [文件索引](docs/README.md)
 - [使用指南](docs/USER_GUIDE.md)
 - [開發與建置指南](docs/BUILDING.md)
-- [隱私權說明](PRIVACY.md)
+- [APP 優化建議](docs/APP_OPTIMIZATION.md)
+- [隱私權說明](docs/PRIVACY.md)
+- [變更紀錄](docs/CHANGELOG.md)
 - [貢獻指南](CONTRIBUTING.md)
 - [授權條款](LICENSE)
 

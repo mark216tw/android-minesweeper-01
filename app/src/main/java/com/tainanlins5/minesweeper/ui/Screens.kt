@@ -28,6 +28,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -86,6 +88,7 @@ private data class GameLayoutActions(
     val onRecords: () -> Unit,
     val onFullscreen: () -> Unit,
     val onSettings: () -> Unit,
+    val onExit: () -> Unit,
     val onRestart: () -> Unit,
     val onFlagMode: () -> Unit,
     val onCenter: () -> Unit,
@@ -103,6 +106,7 @@ fun GameScreen(
     colors: RetroColors,
     flagMode: Boolean,
     resultDialogVisible: Boolean,
+    onMoveToBackground: () -> Unit,
 ) {
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val haptic = LocalHapticFeedback.current
@@ -120,6 +124,7 @@ fun GameScreen(
         onRecords = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.RECORDS) },
         onFullscreen = { viewModel.setFullscreen(!settings.fullscreen) },
         onSettings = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.SETTINGS) },
+        onExit = onMoveToBackground,
         onRestart = { launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount)) },
         onFlagMode = viewModel::toggleFlagMode,
         onCenter = { resetToken++ },
@@ -224,7 +229,7 @@ private fun ClassicGameLayout(
     actions: GameLayoutActions,
 ) {
     Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
-        AppHeader(colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings)
+        AppHeader(colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings, actions.onExit)
         Spacer(Modifier.height(8.dp))
         RetroPanel(colors, Modifier.fillMaxSize()) {
             if (landscape) {
@@ -283,7 +288,7 @@ private fun HandheldGameLayout(
                 SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.fillMaxSize())
             }
             Column(
-                Modifier.width(184.dp).fillMaxHeight(),
+                Modifier.width(216.dp).fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(7.dp),
             ) {
                 HandheldHeader(colors, fullscreen, actions, stacked = true)
@@ -394,6 +399,13 @@ private fun HandheldToolButtons(colors: RetroColors, fullscreen: Boolean, action
             contentDescription = "設定",
             colors = colors,
             onClick = actions.onSettings,
+            modifier = Modifier.size(48.dp),
+        )
+        RetroIconButton(
+            imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
+            contentDescription = "將應用程式移至背景",
+            colors = colors,
+            onClick = actions.onExit,
             modifier = Modifier.size(48.dp),
         )
     }
@@ -533,6 +545,7 @@ private fun AppHeader(
     onRecords: () -> Unit,
     onFullscreen: () -> Unit,
     onSettings: () -> Unit,
+    onExit: () -> Unit,
 ) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
@@ -561,6 +574,14 @@ private fun AppHeader(
             contentDescription = "設定",
             colors = colors,
             onClick = onSettings,
+            modifier = Modifier.size(48.dp),
+        )
+        Spacer(Modifier.width(6.dp))
+        RetroIconButton(
+            imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
+            contentDescription = "將應用程式移至背景",
+            colors = colors,
+            onClick = onExit,
             modifier = Modifier.size(48.dp),
         )
     }

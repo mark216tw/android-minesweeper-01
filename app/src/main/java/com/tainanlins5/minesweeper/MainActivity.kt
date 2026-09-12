@@ -92,6 +92,7 @@ class MainActivity : ComponentActivity() {
                                 colors,
                                 flagMode,
                                 resultDialogVisible,
+                                onMoveToBackground = { moveTaskToBack(true) },
                             )
                             AppScreen.RECORDS -> RecordsScreen(viewModel, results, colors)
                             AppScreen.SETTINGS -> SettingsScreen(viewModel, settings, colors)

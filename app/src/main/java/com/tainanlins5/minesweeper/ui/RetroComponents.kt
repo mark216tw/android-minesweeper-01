@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -93,6 +94,35 @@ fun RetroIconButton(
     ) {
         Icon(
             painter = painterResource(iconRes),
+            contentDescription = null,
+            tint = foreground,
+        )
+    }
+}
+
+@Composable
+fun RetroIconButton(
+    imageVector: ImageVector,
+    contentDescription: String,
+    colors: RetroColors,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    selected: Boolean = false,
+) {
+    val background = if (selected) colors.accent else colors.panel
+    val foreground = if (selected) colors.onAccent else colors.text
+    Box(
+        modifier = modifier
+            .defaultMinSize(minWidth = 48.dp, minHeight = 48.dp)
+            .background(background)
+            .raisedBorder(colors)
+            .semantics { this.contentDescription = contentDescription }
+            .clickable(onClick = onClick)
+            .padding(11.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = imageVector,
             contentDescription = null,
             tint = foreground,
         )

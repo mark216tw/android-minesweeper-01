@@ -17,6 +17,11 @@ enum class AppearanceMode(val label: String) {
     DARK("深色"),
 }
 
+enum class GameLayout(val label: String) {
+    CLASSIC("經典版"),
+    HANDHELD("復古掌機版"),
+}
+
 data class AppSettings(
     val appearanceMode: AppearanceMode = AppearanceMode.SYSTEM,
     val themeHue: Float = 190f,
@@ -25,6 +30,7 @@ data class AppSettings(
     val vibrationEnabled: Boolean = true,
     val flagModeDefault: Boolean = false,
     val customBoards: List<CustomBoardPreset> = emptyList(),
+    val gameLayout: GameLayout = GameLayout.CLASSIC,
 )
 
 data class CustomBoardPreset(
@@ -44,6 +50,7 @@ class SettingsRepository(private val context: Context) {
         val vibration = booleanPreferencesKey("vibration")
         val flagModeDefault = booleanPreferencesKey("flag_mode_default")
         val customBoards = stringPreferencesKey("custom_boards")
+        val gameLayout = stringPreferencesKey("game_layout")
     }
 
     val settings: Flow<AppSettings> = context.settingsDataStore.data.map { values ->
@@ -57,11 +64,16 @@ class SettingsRepository(private val context: Context) {
             vibrationEnabled = values[Keys.vibration] ?: true,
             flagModeDefault = values[Keys.flagModeDefault] ?: false,
             customBoards = decodeCustomBoards(values[Keys.customBoards].orEmpty()),
+            gameLayout = decodeGameLayout(values[Keys.gameLayout]),
         )
     }
 
     suspend fun setAppearance(value: AppearanceMode) = context.settingsDataStore.edit {
         it[Keys.appearance] = value.name
+    }
+
+    suspend fun setGameLayout(value: GameLayout) = context.settingsDataStore.edit {
+        it[Keys.gameLayout] = value.name
     }
 
     suspend fun setThemeHue(value: Float) = context.settingsDataStore.edit {
@@ -114,3 +126,7 @@ internal fun decodeCustomBoards(value: String): List<CustomBoardPreset> = value
     }
     .distinct()
     .take(SettingsRepository.MAX_CUSTOM_BOARDS)
+
+internal fun decodeGameLayout(value: String?): GameLayout = value
+    ?.let { runCatching { GameLayout.valueOf(it) }.getOrNull() }
+    ?: GameLayout.CLASSIC

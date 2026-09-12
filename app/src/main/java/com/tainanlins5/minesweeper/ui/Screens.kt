@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
@@ -48,9 +49,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tainanlins5.minesweeper.BuildConfig
 import com.tainanlins5.minesweeper.GameViewModel
 import com.tainanlins5.minesweeper.R
@@ -58,6 +65,7 @@ import com.tainanlins5.minesweeper.data.AppSettings
 import com.tainanlins5.minesweeper.data.AppearanceMode
 import com.tainanlins5.minesweeper.data.CustomBoardPreset
 import com.tainanlins5.minesweeper.data.GameResult
+import com.tainanlins5.minesweeper.data.GameLayout
 import com.tainanlins5.minesweeper.data.SettingsRepository
 import com.tainanlins5.minesweeper.domain.Difficulty
 import com.tainanlins5.minesweeper.domain.GameState
@@ -70,8 +78,22 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
+import kotlinx.coroutines.flow.StateFlow
 
 private data class GameConfig(val difficulty: Difficulty, val width: Int, val height: Int, val mines: Int)
+
+private data class GameLayoutActions(
+    val onRecords: () -> Unit,
+    val onFullscreen: () -> Unit,
+    val onSettings: () -> Unit,
+    val onRestart: () -> Unit,
+    val onFlagMode: () -> Unit,
+    val onCenter: () -> Unit,
+    val onNewGame: () -> Unit,
+    val onReveal: (Int) -> Unit,
+    val onToggleFlag: (Int) -> Unit,
+    val onLongPress: () -> Unit,
+)
 
 @Composable
 fun GameScreen(
@@ -94,75 +116,42 @@ fun GameScreen(
         else viewModel.startGame(config.difficulty, config.width, config.height, config.mines)
     }
 
-    Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
-        AppHeader(
+    val actions = GameLayoutActions(
+        onRecords = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.RECORDS) },
+        onFullscreen = { viewModel.setFullscreen(!settings.fullscreen) },
+        onSettings = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.SETTINGS) },
+        onRestart = { launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount)) },
+        onFlagMode = viewModel::toggleFlagMode,
+        onCenter = { resetToken++ },
+        onNewGame = { showNewGame = true },
+        onReveal = viewModel::reveal,
+        onToggleFlag = viewModel::toggleFlag,
+        onLongPress = {
+            if (settings.vibrationEnabled) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+        },
+    )
+
+    when (settings.gameLayout) {
+        GameLayout.CLASSIC -> ClassicGameLayout(
+            game = game,
             colors = colors,
+            flagMode = flagMode,
             fullscreen = settings.fullscreen,
-            onRecords = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.RECORDS) },
-            onFullscreen = { viewModel.setFullscreen(!settings.fullscreen) },
-            onSettings = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.SETTINGS) },
+            elapsedMillis = viewModel.displayElapsedMillis,
+            resetToken = resetToken,
+            landscape = landscape,
+            actions = actions,
         )
-        Spacer(Modifier.height(8.dp))
-        RetroPanel(colors, Modifier.fillMaxSize()) {
-            if (landscape) {
-                Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Column(
-                        Modifier.width(190.dp).fillMaxHeight(),
-                        verticalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        StatusPanel(game, colors, onRestart = {
-                            launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount))
-                        })
-                        GameControls(
-                            colors,
-                            flagMode,
-                            onFlagMode = viewModel::toggleFlagMode,
-                            onCenter = { resetToken++ },
-                            onNewGame = { showNewGame = true },
-                            vertical = true,
-                        )
-                    }
-                    GameBoard(
-                        game = game,
-                        colors = colors,
-                        flagMode = flagMode,
-                        resetToken = resetToken,
-                        onReveal = viewModel::reveal,
-                        onToggleFlag = viewModel::toggleFlag,
-                        onLongPress = {
-                            if (settings.vibrationEnabled) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        },
-                        modifier = Modifier.weight(1f).fillMaxHeight().sunkenBorder(colors),
-                    )
-                }
-            } else {
-                Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    StatusPanel(game, colors, onRestart = {
-                        launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount))
-                    })
-                    GameBoard(
-                        game = game,
-                        colors = colors,
-                        flagMode = flagMode,
-                        resetToken = resetToken,
-                        onReveal = viewModel::reveal,
-                        onToggleFlag = viewModel::toggleFlag,
-                        onLongPress = {
-                            if (settings.vibrationEnabled) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        },
-                        modifier = Modifier.weight(1f).fillMaxWidth().sunkenBorder(colors),
-                    )
-                    GameControls(
-                        colors,
-                        flagMode,
-                        onFlagMode = viewModel::toggleFlagMode,
-                        onCenter = { resetToken++ },
-                        onNewGame = { showNewGame = true },
-                        vertical = false,
-                    )
-                }
-            }
-        }
+        GameLayout.HANDHELD -> HandheldGameLayout(
+            game = game,
+            colors = colors,
+            flagMode = flagMode,
+            fullscreen = settings.fullscreen,
+            elapsedMillis = viewModel.displayElapsedMillis,
+            resetToken = resetToken,
+            landscape = landscape,
+            actions = actions,
+        )
     }
 
     if (showNewGame) {
@@ -224,6 +213,320 @@ fun GameScreen(
 }
 
 @Composable
+private fun ClassicGameLayout(
+    game: GameState,
+    colors: RetroColors,
+    flagMode: Boolean,
+    fullscreen: Boolean,
+    elapsedMillis: StateFlow<Long>,
+    resetToken: Int,
+    landscape: Boolean,
+    actions: GameLayoutActions,
+) {
+    Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
+        AppHeader(colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings)
+        Spacer(Modifier.height(8.dp))
+        RetroPanel(colors, Modifier.fillMaxSize()) {
+            if (landscape) {
+                Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Column(
+                        Modifier.width(190.dp).fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
+                        GameControls(
+                            colors,
+                            flagMode,
+                            actions.onFlagMode,
+                            actions.onCenter,
+                            actions.onNewGame,
+                            vertical = true,
+                        )
+                    }
+                    SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.weight(1f).fillMaxHeight())
+                }
+            } else {
+                Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
+                    SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.weight(1f).fillMaxWidth())
+                    GameControls(
+                        colors,
+                        flagMode,
+                        actions.onFlagMode,
+                        actions.onCenter,
+                        actions.onNewGame,
+                        vertical = false,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HandheldGameLayout(
+    game: GameState,
+    colors: RetroColors,
+    flagMode: Boolean,
+    fullscreen: Boolean,
+    elapsedMillis: StateFlow<Long>,
+    resetToken: Int,
+    landscape: Boolean,
+    actions: GameLayoutActions,
+) {
+    if (landscape) {
+        Row(
+            Modifier.fillMaxSize().background(colors.desktop).padding(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            RetroPanel(colors, Modifier.weight(1f).fillMaxHeight()) {
+                SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.fillMaxSize())
+            }
+            Column(
+                Modifier.width(184.dp).fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(7.dp),
+            ) {
+                HandheldHeader(colors, fullscreen, actions, stacked = true)
+                RetroPanel(colors, Modifier.weight(1f).fillMaxWidth()) {
+                    Column(
+                        Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        HandheldSideStatus(game, elapsedMillis, colors, actions.onRestart)
+                        HandheldControls(colors, flagMode, actions, vertical = true)
+                    }
+                }
+            }
+        }
+    } else {
+        Column(
+            Modifier.fillMaxSize().background(colors.desktop).padding(6.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            HandheldHeader(colors, fullscreen, actions, stacked = false)
+            RetroPanel(colors, Modifier.fillMaxWidth()) {
+                StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
+            }
+            RetroPanel(colors, Modifier.weight(1f).fillMaxWidth()) {
+                SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.fillMaxSize())
+            }
+            HandheldControls(colors, flagMode, actions, vertical = false)
+        }
+    }
+}
+
+@Composable
+private fun SharedGameBoard(
+    game: GameState,
+    colors: RetroColors,
+    flagMode: Boolean,
+    resetToken: Int,
+    actions: GameLayoutActions,
+    modifier: Modifier,
+) {
+    GameBoard(
+        width = game.width,
+        height = game.height,
+        cells = game.cells,
+        status = game.status,
+        colors = colors,
+        flagMode = flagMode,
+        resetToken = resetToken,
+        onReveal = actions.onReveal,
+        onToggleFlag = actions.onToggleFlag,
+        onLongPress = actions.onLongPress,
+        modifier = modifier.sunkenBorder(colors),
+    )
+}
+
+@Composable
+private fun HandheldHeader(
+    colors: RetroColors,
+    fullscreen: Boolean,
+    actions: GameLayoutActions,
+    stacked: Boolean,
+) {
+    if (stacked) {
+        Column(
+            Modifier.fillMaxWidth().background(colors.panel).raisedBorder(colors).padding(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 19.sp)
+            Text("POCKET SWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+            Spacer(Modifier.height(5.dp))
+            HandheldToolButtons(colors, fullscreen, actions)
+        }
+    } else {
+        Row(
+            Modifier.fillMaxWidth().background(colors.panel).raisedBorder(colors).padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 20.sp)
+                Text("POCKET SWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+            }
+            HandheldToolButtons(colors, fullscreen, actions)
+        }
+    }
+}
+
+@Composable
+private fun HandheldToolButtons(colors: RetroColors, fullscreen: Boolean, actions: GameLayoutActions) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        RetroIconButton(
+            R.drawable.ic_history,
+            contentDescription = "遊戲紀錄",
+            colors = colors,
+            onClick = actions.onRecords,
+            modifier = Modifier.size(48.dp),
+        )
+        RetroIconButton(
+            R.drawable.ic_fullscreen,
+            contentDescription = if (fullscreen) "關閉全螢幕" else "開啟全螢幕",
+            colors = colors,
+            onClick = actions.onFullscreen,
+            modifier = Modifier.size(48.dp),
+            selected = fullscreen,
+        )
+        RetroIconButton(
+            R.drawable.ic_settings,
+            contentDescription = "設定",
+            colors = colors,
+            onClick = actions.onSettings,
+            modifier = Modifier.size(48.dp),
+        )
+    }
+}
+
+@Composable
+private fun HandheldSideStatus(
+    game: GameState,
+    elapsedMillis: StateFlow<Long>,
+    colors: RetroColors,
+    onRestart: () -> Unit,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("剩餘地雷", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+        SevenSegmentDisplay(game.remainingMines.coerceIn(-99, 999).toString().padStart(3, '0'), colors)
+        Spacer(Modifier.height(7.dp))
+        RetroButton(
+            text = when (game.status) {
+                GameStatus.READY -> "🙂"
+                GameStatus.ACTIVE -> "😐"
+                GameStatus.WON -> "😎"
+                GameStatus.LOST -> "😵"
+            },
+            colors = colors,
+            onClick = onRestart,
+            modifier = Modifier.size(52.dp).semantics { contentDescription = "重新開始遊戲" },
+        )
+        Spacer(Modifier.height(7.dp))
+        Text("遊戲時間", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+        ElapsedTimeDisplay(elapsedMillis, colors)
+        Spacer(Modifier.height(5.dp))
+        Text(
+            "${game.difficulty.label} · ${game.width}×${game.height}",
+            color = colors.mutedText,
+            fontWeight = FontWeight.Bold,
+            fontSize = 11.sp,
+        )
+    }
+}
+
+@Composable
+private fun HandheldControls(
+    colors: RetroColors,
+    flagMode: Boolean,
+    actions: GameLayoutActions,
+    vertical: Boolean,
+) {
+    val content: @Composable () -> Unit = {
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            HandheldRoundButton("A", "插旗", colors, flagMode, actions.onFlagMode)
+            HandheldRoundButton("B", "置中", colors, false, actions.onCenter)
+        }
+        HandheldStartButton(colors, actions.onNewGame)
+    }
+    if (vertical) {
+        Column(
+            Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) { content() }
+    } else {
+        Row(
+            Modifier.fillMaxWidth().background(colors.panel).raisedBorder(colors).padding(horizontal = 12.dp, vertical = 7.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) { content() }
+    }
+}
+
+@Composable
+private fun HandheldRoundButton(
+    code: String,
+    label: String,
+    colors: RetroColors,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val background = if (selected) colors.accent else colors.panelDark
+    val foreground = if (selected) colors.onAccent else colors.panelLight
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .semantics {
+                contentDescription = label
+                role = Role.Button
+                this.selected = selected
+            }
+            .clickable(onClick = onClick),
+    ) {
+        Box(
+            Modifier
+                .size(54.dp)
+                .background(background, CircleShape)
+                .border(3.dp, if (selected) colors.panelLight else colors.panelDark, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(code, color = foreground, fontWeight = FontWeight.Black, fontSize = 20.sp)
+        }
+        Text(
+            if (selected) "✓ $label" else label,
+            color = if (selected) colors.accent else colors.text,
+            fontWeight = FontWeight.Black,
+            fontSize = 11.sp,
+        )
+    }
+}
+
+@Composable
+private fun HandheldStartButton(colors: RetroColors, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .semantics {
+                contentDescription = "新遊戲"
+                role = Role.Button
+            }
+            .clickable(onClick = onClick),
+    ) {
+        Box(
+            Modifier
+                .width(88.dp)
+                .height(30.dp)
+                .background(colors.panelDark, RoundedCornerShape(15.dp))
+                .border(2.dp, colors.panelLight, RoundedCornerShape(15.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text("START", color = colors.panelLight, fontWeight = FontWeight.Black, fontSize = 11.sp)
+        }
+        Text("新遊戲", color = colors.text, fontWeight = FontWeight.Black, fontSize = 11.sp)
+    }
+}
+
+@Composable
 private fun AppHeader(
     colors: RetroColors,
     fullscreen: Boolean,
@@ -264,15 +567,21 @@ private fun AppHeader(
 }
 
 @Composable
-private fun StatusPanel(game: GameState, colors: RetroColors, onRestart: () -> Unit) {
+private fun StatusPanel(
+    remainingMines: Int,
+    status: GameStatus,
+    elapsedMillis: StateFlow<Long>,
+    colors: RetroColors,
+    onRestart: () -> Unit,
+) {
     Row(
         Modifier.fillMaxWidth().background(colors.panel).raisedBorder(colors).padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        SevenSegmentDisplay(game.remainingMines.coerceIn(-99, 999).toString().padStart(3, '0'), colors)
+        SevenSegmentDisplay(remainingMines.coerceIn(-99, 999).toString().padStart(3, '0'), colors)
         RetroButton(
-            text = when (game.status) {
+            text = when (status) {
                 GameStatus.READY -> "🙂"
                 GameStatus.ACTIVE -> "😐"
                 GameStatus.WON -> "😎"
@@ -282,8 +591,14 @@ private fun StatusPanel(game: GameState, colors: RetroColors, onRestart: () -> U
             onClick = onRestart,
             modifier = Modifier.size(52.dp),
         )
-        SevenSegmentDisplay(formatDuration(game.elapsedMillis), colors)
+        ElapsedTimeDisplay(elapsedMillis, colors)
     }
+}
+
+@Composable
+private fun ElapsedTimeDisplay(elapsedMillis: StateFlow<Long>, colors: RetroColors) {
+    val elapsed by elapsedMillis.collectAsStateWithLifecycle()
+    SevenSegmentDisplay(formatDuration(elapsed), colors)
 }
 
 @Composable
@@ -548,6 +863,20 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         ScreenHeader("設定", colors, onBack = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.GAME) })
+        RetroPanel(colors, Modifier.fillMaxWidth()) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                SectionTitle("主介面版型", colors)
+                ChoiceRow(
+                    GameLayout.entries,
+                    settings.gameLayout,
+                    GameLayout::label,
+                    colors,
+                    viewModel::setGameLayout,
+                    Modifier.fillMaxWidth(),
+                )
+                Text("切換版型不會中斷目前遊戲", color = colors.mutedText, fontSize = 12.sp)
+            }
+        }
         RetroPanel(colors, Modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SectionTitle("外觀模式", colors)

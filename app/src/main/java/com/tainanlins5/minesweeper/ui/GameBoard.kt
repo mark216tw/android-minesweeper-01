@@ -31,7 +31,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.tainanlins5.minesweeper.domain.Cell
-import com.tainanlins5.minesweeper.domain.GameState
 import com.tainanlins5.minesweeper.domain.GameStatus
 import kotlin.math.floor
 import kotlin.math.min
@@ -50,7 +49,10 @@ private val NumberColors = listOf(
 
 @Composable
 fun GameBoard(
-    game: GameState,
+    width: Int,
+    height: Int,
+    cells: List<Cell>,
+    status: GameStatus,
     colors: RetroColors,
     flagMode: Boolean,
     resetToken: Int,
@@ -64,14 +66,14 @@ fun GameBoard(
     BoxWithConstraints(
         modifier = modifier.clipToBounds().background(colors.panelDark),
     ) {
-        val boardWidth = cellDp * game.width
-        val boardHeight = cellDp * game.height
+        val boardWidth = cellDp * width
+        val boardHeight = cellDp * height
         val fitScale = min(1f, min(maxWidth.value / boardWidth.value, maxHeight.value / boardHeight.value))
             .coerceAtLeast(0.2f)
-        var scale by remember(game.width, game.height, maxWidth, maxHeight, resetToken) {
+        var scale by remember(width, height, maxWidth, maxHeight, resetToken) {
             mutableFloatStateOf(fitScale)
         }
-        var translation by remember(game.width, game.height, maxWidth, maxHeight, resetToken) {
+        var translation by remember(width, height, maxWidth, maxHeight, resetToken) {
             mutableStateOf(Offset.Zero)
         }
         val transformState = rememberTransformableState { zoomChange, panChange, _ ->
@@ -80,11 +82,22 @@ fun GameBoard(
         }
 
         val cellPx = with(density) { cellDp.toPx() }
+        val numberPaints = remember(cellPx) {
+            NumberColors.map { color ->
+                Paint().apply {
+                    this.color = color.toArgb()
+                    textAlign = Paint.Align.CENTER
+                    textSize = cellPx * 0.72f
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD
+                    isAntiAlias = false
+                }
+            }
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .transformable(transformState)
-                .pointerInput(game.cells, flagMode, scale, translation, constraints) {
+                .pointerInput(cells, flagMode, scale, translation, constraints) {
                     detectTapGestures(
                         onTap = { position ->
                             cellIndexAt(
@@ -93,8 +106,8 @@ fun GameBoard(
                                 size.width.toFloat(),
                                 size.height.toFloat(),
                                 cellPx,
-                                game.width,
-                                game.height,
+                                width,
+                                height,
                                 scale,
                                 translation.x,
                                 translation.y,
@@ -109,8 +122,8 @@ fun GameBoard(
                                 size.width.toFloat(),
                                 size.height.toFloat(),
                                 cellPx,
-                                game.width,
-                                game.height,
+                                width,
+                                height,
                                 scale,
                                 translation.x,
                                 translation.y,
@@ -133,16 +146,17 @@ fun GameBoard(
                         translationY = translation.y
                     },
             ) {
-                val cellSize = size.width / game.width
-                game.cells.forEachIndexed { index, cell ->
-                    val x = (index % game.width) * cellSize
-                    val y = (index / game.width) * cellSize
+                val cellSize = size.width / width
+                cells.forEachIndexed { index, cell ->
+                    val x = (index % width) * cellSize
+                    val y = (index / width) * cellSize
                     drawCell(
                         cell = cell,
                         topLeft = Offset(x, y),
                         size = cellSize,
                         colors = colors,
-                        showWrongFlag = game.status == GameStatus.LOST && cell.isFlagged && !cell.hasMine,
+                        numberPaints = numberPaints,
+                        showWrongFlag = status == GameStatus.LOST && cell.isFlagged && !cell.hasMine,
                     )
                 }
             }
@@ -176,6 +190,7 @@ private fun DrawScope.drawCell(
     topLeft: Offset,
     size: Float,
     colors: RetroColors,
+    numberPaints: List<Paint>,
     showWrongFlag: Boolean,
 ) {
     if (cell.isRevealed && !showWrongFlag) {
@@ -183,7 +198,7 @@ private fun DrawScope.drawCell(
         drawRect(colors.panelDark, topLeft, Size(size, size), style = Stroke(1f))
         when {
             cell.hasMine -> drawMine(topLeft, size, colors.text)
-            cell.adjacentMines > 0 -> drawNumber(cell.adjacentMines, topLeft, size)
+            cell.adjacentMines > 0 -> drawNumber(cell.adjacentMines, topLeft, size, numberPaints[cell.adjacentMines])
         }
     } else {
         drawRect(colors.panel, topLeft, Size(size, size))
@@ -200,14 +215,7 @@ private fun DrawScope.drawCell(
     }
 }
 
-private fun DrawScope.drawNumber(number: Int, topLeft: Offset, size: Float) {
-    val paint = Paint().apply {
-        color = NumberColors[number].toArgb()
-        textAlign = Paint.Align.CENTER
-        textSize = size * 0.72f
-        typeface = android.graphics.Typeface.DEFAULT_BOLD
-        isAntiAlias = false
-    }
+private fun DrawScope.drawNumber(number: Int, topLeft: Offset, size: Float, paint: Paint) {
     drawContext.canvas.nativeCanvas.drawText(
         number.toString(),
         topLeft.x + size / 2,

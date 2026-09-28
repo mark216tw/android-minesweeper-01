@@ -37,6 +37,7 @@ data class GameState(
     val cells: List<Cell> = List(width * height) { Cell() },
     val minesGenerated: Boolean = false,
     val elapsedMillis: Long = 0L,
+    val undoUsed: Boolean = false,
 ) {
     val flagCount: Int get() = cells.count(Cell::isFlagged)
     val remainingMines: Int get() = mineCount - flagCount

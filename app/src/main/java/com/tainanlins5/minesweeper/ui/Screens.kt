@@ -110,6 +110,8 @@ fun GameScreen(
 ) {
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val haptic = LocalHapticFeedback.current
+    val canUndoLoss by viewModel.canUndoLoss.collectAsStateWithLifecycle()
+    val isUndoingLoss by viewModel.isUndoingLoss.collectAsStateWithLifecycle()
     var showNewGame by remember { mutableStateOf(false) }
     var showCustom by remember { mutableStateOf(false) }
     var pendingGame by remember { mutableStateOf<GameConfig?>(null) }
@@ -207,12 +209,24 @@ fun GameScreen(
             title = { Text(if (won) "掃雷成功！" else "踩到地雷！", color = colors.text, fontWeight = FontWeight.Black) },
             text = { Text("時間：${formatDuration(game.elapsedMillis)}", color = colors.text) },
             confirmButton = {
-                RetroButton("再玩一次", colors, onClick = {
-                    viewModel.dismissResultDialog()
-                    viewModel.restartGame()
-                })
+                Column(
+                    Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    if (isUndoingLoss) {
+                        Text("正在恢復棋局…", color = colors.text, modifier = Modifier.padding(12.dp))
+                    } else if (!won && canUndoLoss) {
+                        RetroButton("悔棋(限一次)", colors, onClick = viewModel::undoLoss, modifier = Modifier.fillMaxWidth())
+                    }
+                    if (!isUndoingLoss) {
+                        RetroButton("再玩一次", colors, onClick = {
+                            viewModel.dismissResultDialog()
+                            viewModel.restartGame()
+                        }, modifier = Modifier.fillMaxWidth())
+                        RetroButton("關閉", colors, onClick = viewModel::dismissResultDialog, modifier = Modifier.fillMaxWidth())
+                    }
+                }
             },
-            dismissButton = { RetroButton("關閉", colors, onClick = viewModel::dismissResultDialog) },
         )
     }
 }

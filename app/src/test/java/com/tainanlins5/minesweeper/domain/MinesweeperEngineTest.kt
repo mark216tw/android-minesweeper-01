@@ -50,6 +50,38 @@ class MinesweeperEngineTest {
     }
 
     @Test
+    fun undoLossRestoresPreviousStateAndMarksUndoUsed() {
+        val active = MinesweeperEngine.reveal(
+            MinesweeperEngine.newGame(Difficulty.BEGINNER),
+            0,
+            Random(12),
+        )
+        val mine = active.cells.indexOfFirst { it.hasMine }
+        val lost = MinesweeperEngine.reveal(active, mine)
+
+        val restored = MinesweeperEngine.undoLoss(active, lost)
+
+        requireNotNull(restored)
+        assertEquals(GameStatus.ACTIVE, restored.status)
+        assertEquals(active.cells, restored.cells)
+        assertEquals(active.elapsedMillis, restored.elapsedMillis)
+        assertTrue(restored.undoUsed)
+    }
+
+    @Test
+    fun undoLossCanOnlyBeUsedOncePerGame() {
+        val active = MinesweeperEngine.reveal(
+            MinesweeperEngine.newGame(Difficulty.BEGINNER),
+            0,
+            Random(12),
+        ).copy(undoUsed = true)
+        val mine = active.cells.indexOfFirst { it.hasMine }
+        val lost = MinesweeperEngine.reveal(active, mine)
+
+        assertEquals(null, MinesweeperEngine.undoLoss(active, lost))
+    }
+
+    @Test
     fun validCustomGameUsesRequestedDimensions() {
         val state = MinesweeperEngine.newGame(Difficulty.CUSTOM, 30, 24, 200)
 
@@ -96,6 +128,21 @@ class MinesweeperEngineTest {
 
         assertEquals(GameStatus.LOST, state.status)
         assertTrue(state.cells[0].isExploded)
+    }
+
+    @Test
+    fun chordLossCanBeUndone() {
+        val cells = boardWithSingleMine().toMutableList()
+        cells[1] = cells[1].copy(isFlagged = true)
+        cells[6] = cells[6].copy(isRevealed = true)
+        val active = GameState(5, 5, 1, Difficulty.CUSTOM, GameStatus.ACTIVE, cells, true)
+        val lost = MinesweeperEngine.chord(active, 6)
+
+        val restored = MinesweeperEngine.undoLoss(active, lost)
+
+        requireNotNull(restored)
+        assertEquals(active.cells, restored.cells)
+        assertTrue(restored.undoUsed)
     }
 
     private fun boardWithSingleMine(): List<Cell> = List(25) { index ->

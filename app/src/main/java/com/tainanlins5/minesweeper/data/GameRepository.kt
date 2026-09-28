@@ -32,22 +32,29 @@ class GameRepository(private val dao: GameDao) {
 
     suspend fun clearActiveGame() = dao.clearActiveGame()
 
-    suspend fun addResult(state: GameState, resultType: ResultType) {
-        dao.insertResult(
-            GameResultEntity(
-                resultType = resultType.name,
-                difficulty = state.difficulty.name,
-                width = state.width,
-                height = state.height,
-                mineCount = state.mineCount,
-                elapsedMillis = state.elapsedMillis,
-                endedAtMillis = System.currentTimeMillis(),
-            ),
-        )
-    }
+    suspend fun addResult(state: GameState, resultType: ResultType): Long =
+        dao.insertResult(state.toResultEntity(resultType))
+
+    suspend fun deleteResult(id: Long) = dao.deleteResult(id)
+
+    suspend fun saveResultAndClearActiveGame(state: GameState, resultType: ResultType): Long =
+        dao.saveResultAndClearActiveGame(state.toResultEntity(resultType))
+
+    suspend fun deleteResultAndRestoreActiveGame(resultId: Long, state: GameState) =
+        dao.deleteResultAndRestoreActiveGame(resultId, state.toEntity())
 
     suspend fun clearResults() = dao.clearResults()
 }
+
+private fun GameState.toResultEntity(resultType: ResultType) = GameResultEntity(
+    resultType = resultType.name,
+    difficulty = difficulty.name,
+    width = width,
+    height = height,
+    mineCount = mineCount,
+    elapsedMillis = elapsedMillis,
+    endedAtMillis = System.currentTimeMillis(),
+)
 
 private fun GameResultEntity.toModel() = GameResult(
     id = id,
@@ -68,6 +75,7 @@ private fun GameState.toEntity() = ActiveGameEntity(
     status = status.name,
     minesGenerated = minesGenerated,
     elapsedMillis = elapsedMillis,
+    undoUsed = undoUsed,
     encodedCells = buildString(cells.size * 2) {
         cells.forEach { cell ->
             val value =
@@ -102,5 +110,6 @@ private fun ActiveGameEntity.toModel(): GameState {
         cells = restoredCells,
         minesGenerated = minesGenerated,
         elapsedMillis = elapsedMillis,
+        undoUsed = undoUsed,
     )
 }

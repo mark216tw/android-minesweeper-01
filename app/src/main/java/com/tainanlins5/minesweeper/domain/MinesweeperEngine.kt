@@ -47,6 +47,12 @@ object MinesweeperEngine {
         return state.copy(cells = cells)
     }
 
+    fun undoLoss(previous: GameState, lost: GameState): GameState? {
+        if (previous.status != GameStatus.ACTIVE || previous.undoUsed || lost.status != GameStatus.LOST) return null
+        if (previous.width != lost.width || previous.height != lost.height || previous.mineCount != lost.mineCount) return null
+        return previous.copy(undoUsed = true)
+    }
+
     private fun generateMines(state: GameState, firstIndex: Int, random: Random): GameState {
         val excluded = neighbors(state.width, state.height, firstIndex).toMutableSet().apply {
             add(firstIndex)

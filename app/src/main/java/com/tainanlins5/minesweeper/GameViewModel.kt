@@ -18,7 +18,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +31,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 enum class AppScreen {
@@ -74,6 +78,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var runningSinceRealtime: Long? = null
     private var timerJob: Job? = null
     private var isAppResumed = false
+    private var stateBeforeLoss: GameState? = null
+    private var lossResultJob: Deferred<Long>? = null
+    private val persistenceMutex = Mutex()
+    val canUndoLoss = MutableStateFlow(false)
+    val isUndoingLoss = MutableStateFlow(false)
 
     init {
         viewModelScope.launch {
@@ -91,6 +100,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun showScreen(value: AppScreen) {
         if (screen.value == AppScreen.GAME && value != AppScreen.GAME) {
             resultDialogVisible.value = false
+            clearLossUndo()
             pauseClock()
         }
         screen.value = value
@@ -98,7 +108,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun dismissResultDialog() {
+        if (isUndoingLoss.value) return
         resultDialogVisible.value = false
+        clearLossUndo()
     }
 
     fun reveal(index: Int) {
@@ -118,7 +130,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         } else if (current.status == GameStatus.ACTIVE) {
             runningSinceRealtime = if (after.status == GameStatus.ACTIVE) now else null
         }
-        updateGame(after, SoundEffect.REVEAL)
+        updateGame(after, SoundEffect.REVEAL, before)
     }
 
     fun toggleFlag(index: Int) {
@@ -139,11 +151,12 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val current = withCurrentElapsed(_game.value, SystemClock.elapsedRealtime())
         stopClock()
         resultDialogVisible.value = false
+        clearLossUndo()
         val newGame = MinesweeperEngine.newGame(difficulty, width, height, mines)
         _game.value = newGame
         publishDisplayElapsed(0L)
         screen.value = AppScreen.GAME
-        viewModelScope.launch(Dispatchers.IO) {
+        persist {
             if (current.hasStarted && current.status == GameStatus.ACTIVE) {
                 gameRepository.addResult(current, ResultType.ABANDONED)
             }
@@ -158,6 +171,26 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _game.value.mineCount,
     )
 
+    fun undoLoss() {
+        val restored = stateBeforeLoss?.let { MinesweeperEngine.undoLoss(it, _game.value) } ?: return
+        val resultJob = lossResultJob ?: return
+        canUndoLoss.value = false
+        isUndoingLoss.value = true
+        viewModelScope.launch {
+            val resultId = resultJob.await()
+            persistenceMutex.withLock {
+                withContext(Dispatchers.IO) {
+                    gameRepository.deleteResultAndRestoreActiveGame(resultId, restored)
+                }
+            }
+            clearLossUndo()
+            resultDialogVisible.value = false
+            _game.value = restored
+            publishDisplayElapsed(restored.elapsedMillis)
+            if (isAppResumed && screen.value == AppScreen.GAME) startClock()
+        }
+    }
+
     fun onAppPaused() {
         isAppResumed = false
         pauseClock()
@@ -169,7 +202,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         publishDisplayElapsed(state.elapsedMillis)
         stopClock()
         if (state.status == GameStatus.READY || state.status == GameStatus.ACTIVE) {
-            viewModelScope.launch(Dispatchers.IO) { gameRepository.saveActiveGame(state) }
+            persist { gameRepository.saveActiveGame(state) }
         }
     }
 
@@ -179,7 +212,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun clearResults() {
-        viewModelScope.launch(Dispatchers.IO) { gameRepository.clearResults() }
+        persist { gameRepository.clearResults() }
     }
 
     fun setAppearance(value: AppearanceMode) {
@@ -219,9 +252,15 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch { settingsRepository.deleteCustomBoard(preset) }
     }
 
-    private fun updateGame(updated: GameState, normalSound: SoundEffect) {
+    private fun updateGame(updated: GameState, normalSound: SoundEffect, previous: GameState? = null) {
         val completed = updated.status == GameStatus.WON || updated.status == GameStatus.LOST
         if (completed) stopClock()
+        if (updated.status == GameStatus.LOST && previous != null && !previous.undoUsed) {
+            stateBeforeLoss = previous
+            canUndoLoss.value = true
+        } else {
+            clearLossUndo()
+        }
         _game.value = updated
         publishDisplayElapsed(updated.elapsedMillis)
         resultDialogVisible.value = completed
@@ -234,15 +273,39 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                 },
             )
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            if (completed) {
-                gameRepository.addResult(
-                    updated,
-                    if (updated.status == GameStatus.WON) ResultType.WON else ResultType.LOST,
-                )
-                gameRepository.clearActiveGame()
-            } else {
-                gameRepository.saveActiveGame(updated)
+        if (completed && updated.status == GameStatus.LOST) {
+            lossResultJob = viewModelScope.async {
+                persistenceMutex.withLock {
+                    withContext(Dispatchers.IO) {
+                        gameRepository.saveResultAndClearActiveGame(updated, ResultType.LOST)
+                    }
+                }
+            }
+        } else {
+            persist {
+                if (completed) {
+                    gameRepository.saveResultAndClearActiveGame(
+                        updated,
+                        ResultType.WON,
+                    )
+                } else {
+                    gameRepository.saveActiveGame(updated)
+                }
+            }
+        }
+    }
+
+    private fun clearLossUndo() {
+        stateBeforeLoss = null
+        lossResultJob = null
+        canUndoLoss.value = false
+        isUndoingLoss.value = false
+    }
+
+    private fun persist(block: suspend () -> Unit) {
+        viewModelScope.launch {
+            persistenceMutex.withLock {
+                withContext(Dispatchers.IO) { block() }
             }
         }
     }

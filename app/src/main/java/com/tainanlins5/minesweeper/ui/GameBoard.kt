@@ -56,6 +56,7 @@ fun GameBoard(
     colors: RetroColors,
     flagMode: Boolean,
     resetToken: Int,
+    showLossDetails: Boolean = true,
     onReveal: (Int) -> Unit,
     onToggleFlag: (Int) -> Unit,
     onLongPress: () -> Unit,
@@ -150,19 +151,27 @@ fun GameBoard(
                 cells.forEachIndexed { index, cell ->
                     val x = (index % width) * cellSize
                     val y = (index / width) * cellSize
+                    val displayedCell = cellForDisplay(cell, status, showLossDetails)
                     drawCell(
-                        cell = cell,
+                        cell = displayedCell,
                         topLeft = Offset(x, y),
                         size = cellSize,
                         colors = colors,
                         numberPaints = numberPaints,
-                        showWrongFlag = status == GameStatus.LOST && cell.isFlagged && !cell.hasMine,
+                        showWrongFlag = showLossDetails && status == GameStatus.LOST && cell.isFlagged && !cell.hasMine,
                     )
                 }
             }
         }
     }
 }
+
+internal fun cellForDisplay(cell: Cell, status: GameStatus, showLossDetails: Boolean): Cell =
+    if (status == GameStatus.LOST && !showLossDetails && cell.hasMine && !cell.isExploded) {
+        cell.copy(isRevealed = false)
+    } else {
+        cell
+    }
 
 internal fun cellIndexAt(
     tapX: Float,

@@ -1,10 +1,52 @@
 package com.tainanlins5.minesweeper.ui
 
+import com.tainanlins5.minesweeper.domain.Cell
+import com.tainanlins5.minesweeper.domain.GameStatus
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GameBoardCoordinatesTest {
+    @Test
+    fun lossDialogHidesUnexplodedMine() {
+        val mine = Cell(hasMine = true, isRevealed = true)
+
+        val displayed = cellForDisplay(mine, GameStatus.LOST, showLossDetails = false)
+
+        assertFalse(displayed.isRevealed)
+    }
+
+    @Test
+    fun lossDialogKeepsExplodedMineVisible() {
+        val mine = Cell(hasMine = true, isRevealed = true, isExploded = true)
+
+        val displayed = cellForDisplay(mine, GameStatus.LOST, showLossDetails = false)
+
+        assertTrue(displayed.isRevealed)
+        assertTrue(displayed.isExploded)
+    }
+
+    @Test
+    fun lossDialogKeepsFlagOnHiddenMine() {
+        val mine = Cell(hasMine = true, isRevealed = true, isFlagged = true)
+
+        val displayed = cellForDisplay(mine, GameStatus.LOST, showLossDetails = false)
+
+        assertFalse(displayed.isRevealed)
+        assertTrue(displayed.isFlagged)
+    }
+
+    @Test
+    fun closedLossDialogRevealsMine() {
+        val mine = Cell(hasMine = true, isRevealed = true)
+
+        val displayed = cellForDisplay(mine, GameStatus.LOST, showLossDetails = true)
+
+        assertTrue(displayed.isRevealed)
+    }
+
     @Test
     fun mediumBoardMapsTapAfterFitScaling() {
         val scale = 320f / (28f * 16f)

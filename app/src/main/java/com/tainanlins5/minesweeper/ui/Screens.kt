@@ -147,6 +147,7 @@ fun GameScreen(
             elapsedMillis = viewModel.displayElapsedMillis,
             resetToken = resetToken,
             landscape = landscape,
+            showLossDetails = !resultDialogVisible,
             actions = actions,
         )
         GameLayout.HANDHELD -> HandheldGameLayout(
@@ -157,6 +158,7 @@ fun GameScreen(
             elapsedMillis = viewModel.displayElapsedMillis,
             resetToken = resetToken,
             landscape = landscape,
+            showLossDetails = !resultDialogVisible,
             actions = actions,
         )
     }
@@ -240,6 +242,7 @@ private fun ClassicGameLayout(
     elapsedMillis: StateFlow<Long>,
     resetToken: Int,
     landscape: Boolean,
+    showLossDetails: Boolean,
     actions: GameLayoutActions,
 ) {
     Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
@@ -262,12 +265,12 @@ private fun ClassicGameLayout(
                             vertical = true,
                         )
                     }
-                    SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.weight(1f).fillMaxHeight())
+                    SharedGameBoard(game, colors, flagMode, resetToken, showLossDetails, actions, Modifier.weight(1f).fillMaxHeight())
                 }
             } else {
                 Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
-                    SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.weight(1f).fillMaxWidth())
+                    SharedGameBoard(game, colors, flagMode, resetToken, showLossDetails, actions, Modifier.weight(1f).fillMaxWidth())
                     GameControls(
                         colors,
                         flagMode,
@@ -291,6 +294,7 @@ private fun HandheldGameLayout(
     elapsedMillis: StateFlow<Long>,
     resetToken: Int,
     landscape: Boolean,
+    showLossDetails: Boolean,
     actions: GameLayoutActions,
 ) {
     if (landscape) {
@@ -299,7 +303,7 @@ private fun HandheldGameLayout(
             horizontalArrangement = Arrangement.spacedBy(7.dp),
         ) {
             RetroPanel(colors, Modifier.weight(1f).fillMaxHeight()) {
-                SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.fillMaxSize())
+                SharedGameBoard(game, colors, flagMode, resetToken, showLossDetails, actions, Modifier.fillMaxSize())
             }
             Column(
                 Modifier.width(216.dp).fillMaxHeight(),
@@ -328,7 +332,7 @@ private fun HandheldGameLayout(
                 StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
             }
             RetroPanel(colors, Modifier.weight(1f).fillMaxWidth()) {
-                SharedGameBoard(game, colors, flagMode, resetToken, actions, Modifier.fillMaxSize())
+                SharedGameBoard(game, colors, flagMode, resetToken, showLossDetails, actions, Modifier.fillMaxSize())
             }
             HandheldControls(colors, flagMode, actions, vertical = false)
         }
@@ -341,6 +345,7 @@ private fun SharedGameBoard(
     colors: RetroColors,
     flagMode: Boolean,
     resetToken: Int,
+    showLossDetails: Boolean,
     actions: GameLayoutActions,
     modifier: Modifier,
 ) {
@@ -352,6 +357,7 @@ private fun SharedGameBoard(
         colors = colors,
         flagMode = flagMode,
         resetToken = resetToken,
+        showLossDetails = showLossDetails,
         onReveal = actions.onReveal,
         onToggleFlag = actions.onToggleFlag,
         onLongPress = actions.onLongPress,

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>踩地雷 · 復古風格視覺提案</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px; background: #15171c; color: #f5f5f5; font-family: 'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif; }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  p.lead { margin: 0 0 28px; color: #b8bbc4; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; max-width: 980px; }
+  .card { background: #22252b; border: 1px solid #3a3d45; border-radius: 14px; padding: 16px; }
+  .card h2 { margin: 0 0 2px; font-size: 17px; }
+  .card p { margin: 0 0 12px; color: #b8bbc4; font-size: 13px; line-height: 1.5; }
+  .frame { border-radius: 10px; overflow: hidden; background: #0f1014; }
+  img { display: block; width: 100%; height: auto; }
+  .tag { display: inline-block; margin-top: 10px; padding: 4px 8px; border: 1px solid #4a4e57; border-radius: 999px; color: #b8bbc4; font-size: 11px; }
+  .note { max-width: 980px; margin-top: 28px; padding: 16px; border-left: 3px solid #8bac0f; background: #1b1e23; color: #c9ccd3; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <h1>踩地雷 · 復古風格視覺提案</h1>
+  <p class="lead">Game Boy 綠與麥金塔單色，各自套用在「經典版」與「復古掌機版」。控制按鈕位置不變，只改變配色與材質語言。</p>
+  <div class="grid">
+    <div class="card">
+      <h2>Game Boy 綠 × 經典版</h2>
+      <p>DMG 四色綠、點陣背景、經典三鍵列。適合保留現在的 Windows 操作習慣，只換上掌機螢幕質感。</p>
+      <div class="frame"><img src="gameboy-classic.svg" alt="Game Boy 綠 × 經典版"></div>
+      <span class="tag">STYLE 01</span>
+    </div>
+    <div class="card">
+      <h2>Game Boy 綠 × 復古掌機版</h2>
+      <p>同樣的 DMG 綠，搭配 A / B / START 控制盤，最接近掌機實機的氛圍。</p>
+      <div class="frame"><img src="gameboy-handheld.svg" alt="Game Boy 綠 × 復古掌機版"></div>
+      <span class="tag">STYLE 02</span>
+    </div>
+    <div class="card">
+      <h2>麥金塔單色 × 經典版</h2>
+      <p>System 7 黑白視窗、條紋標題列、單色數字與旗幟。保留經典資訊列與三鍵操作。</p>
+      <div class="frame"><img src="macintosh-classic.svg" alt="麥金塔單色 × 經典版"></div>
+      <span class="tag">STYLE 03</span>
+    </div>
+    <div class="card">
+      <h2>麥金塔單色 × 復古掌機版</h2>
+      <p>Macintosh 視窗語言套用在掌機版配置，A / B / START 仍維持原來的位置。</p>
+      <div class="frame"><img src="macintosh-handheld.svg" alt="麥金塔單色 × 復古掌機版"></div>
+      <span class="tag">STYLE 04</span>
+    </div>
+  </div>
+  <div class="note">
+    <strong>共同原則：</strong>不改動棋盤、狀態列與操作按鈕的位置；只調整色盤、邊框、顯示器與字體氣質。
+    兩種風格都可再提供淺色／深色變體。這批僅為視覺提案，尚未改動 App 程式。
+  </div>
+</body>
+</html>

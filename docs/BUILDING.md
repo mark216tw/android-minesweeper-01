@@ -132,7 +132,7 @@ APP 不宣告 `android.permission.INTERNET`，也不包含廣告、分析或追�
 ## 資料與相容性
 
 - Room 保存進行中的棋局及遊戲紀錄。
-- DataStore 保存外觀、主題色、操作偏好及自訂棋盤預設。
+- DataStore 保存外觀、復古風格、操作偏好及自訂棋盤預設。
 - 修改 Room schema 時必須提供 Migration 或明確處理資料重建策略。
 - 修改持久化格式時應保留既有資料相容性，並增加測試。
 

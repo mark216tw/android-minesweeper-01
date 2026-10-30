@@ -28,8 +28,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,6 +36,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -68,6 +67,7 @@ import com.tainanlins5.minesweeper.data.AppearanceMode
 import com.tainanlins5.minesweeper.data.CustomBoardPreset
 import com.tainanlins5.minesweeper.data.GameResult
 import com.tainanlins5.minesweeper.data.GameLayout
+import com.tainanlins5.minesweeper.data.RetroStyle
 import com.tainanlins5.minesweeper.data.SettingsRepository
 import com.tainanlins5.minesweeper.domain.Difficulty
 import com.tainanlins5.minesweeper.domain.GameState
@@ -88,14 +88,12 @@ private data class GameLayoutActions(
     val onRecords: () -> Unit,
     val onFullscreen: () -> Unit,
     val onSettings: () -> Unit,
-    val onExit: () -> Unit,
     val onRestart: () -> Unit,
     val onFlagMode: () -> Unit,
     val onCenter: () -> Unit,
     val onNewGame: () -> Unit,
     val onReveal: (Int) -> Unit,
     val onToggleFlag: (Int) -> Unit,
-    val onLongPress: () -> Unit,
 )
 
 @Composable
@@ -106,37 +104,55 @@ fun GameScreen(
     colors: RetroColors,
     flagMode: Boolean,
     resultDialogVisible: Boolean,
-    onMoveToBackground: () -> Unit,
 ) {
     val landscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val haptic = LocalHapticFeedback.current
+    val context = LocalContext.current
     val canUndoLoss by viewModel.canUndoLoss.collectAsStateWithLifecycle()
     val isUndoingLoss by viewModel.isUndoingLoss.collectAsStateWithLifecycle()
+    val results by viewModel.results.collectAsStateWithLifecycle()
+    val bestTimes = remember(results) { bestTimesByDifficulty(results) }
     var showNewGame by remember { mutableStateOf(false) }
     var showCustom by remember { mutableStateOf(false) }
     var pendingGame by remember { mutableStateOf<GameConfig?>(null) }
     var resetToken by remember { mutableIntStateOf(0) }
+    var lastHapticStatus by remember { mutableStateOf(game.status) }
 
     fun launch(config: GameConfig) {
-        if (game.status == GameStatus.ACTIVE) pendingGame = config
-        else viewModel.startGame(config.difficulty, config.width, config.height, config.mines)
+        if (game.status == GameStatus.ACTIVE) {
+            pendingGame = config
+        } else {
+            resetToken = 0
+            viewModel.startGame(config.difficulty, config.width, config.height, config.mines)
+        }
     }
 
     val actions = GameLayoutActions(
         onRecords = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.RECORDS) },
         onFullscreen = { viewModel.setFullscreen(!settings.fullscreen) },
         onSettings = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.SETTINGS) },
-        onExit = onMoveToBackground,
         onRestart = { launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount)) },
         onFlagMode = viewModel::toggleFlagMode,
         onCenter = { resetToken++ },
         onNewGame = { showNewGame = true },
-        onReveal = viewModel::reveal,
-        onToggleFlag = viewModel::toggleFlag,
-        onLongPress = {
+        onReveal = { index ->
+            if (settings.vibrationEnabled) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+            viewModel.reveal(index)
+        },
+        onToggleFlag = { index ->
             if (settings.vibrationEnabled) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            viewModel.toggleFlag(index)
         },
     )
+
+    LaunchedEffect(game.status) {
+        if (game.status != lastHapticStatus) {
+            lastHapticStatus = game.status
+            if (settings.vibrationEnabled && (game.status == GameStatus.WON || game.status == GameStatus.LOST)) {
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+            }
+        }
+    }
 
     when (settings.gameLayout) {
         GameLayout.CLASSIC -> ClassicGameLayout(
@@ -166,6 +182,7 @@ fun GameScreen(
     if (showNewGame) {
         NewGameDialog(
             colors = colors,
+            bestTimes = bestTimes,
             onDismiss = { showNewGame = false },
             onDifficulty = { difficulty ->
                 showNewGame = false
@@ -199,17 +216,38 @@ fun GameScreen(
             onDismiss = { pendingGame = null },
             onConfirm = {
                 pendingGame = null
+                resetToken = 0
                 viewModel.startGame(config.difficulty, config.width, config.height, config.mines)
             },
         )
     }
     if (resultDialogVisible && (game.status == GameStatus.WON || game.status == GameStatus.LOST)) {
         val won = game.status == GameStatus.WON
+        val showBest = game.difficulty != Difficulty.CUSTOM
+        val bestTime = if (showBest) bestTimes[game.difficulty] else null
+        val effectiveBest = when {
+            !showBest -> null
+            bestTime != null -> bestTime
+            won -> game.elapsedMillis
+            else -> null
+        }
+        val isNewRecord = showBest && won && (bestTime == null || game.elapsedMillis <= bestTime)
         AlertDialog(
             onDismissRequest = viewModel::dismissResultDialog,
             containerColor = colors.panel,
             title = { Text(if (won) "掃雷成功！" else "踩到地雷！", color = colors.text, fontWeight = FontWeight.Black) },
-            text = { Text("時間：${formatDuration(game.elapsedMillis)}", color = colors.text) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("難度：${game.difficulty.label}", color = colors.text)
+                    Text("棋盤：${game.width} × ${game.height} · ${game.mineCount} 雷", color = colors.text)
+                    Text("時間：${formatDuration(game.elapsedMillis)}", color = colors.text)
+                    if (!won) Text("剩餘悔棋：${game.undosRemaining} 次", color = colors.text)
+                    effectiveBest?.let { Text("最佳：${formatDuration(it)}", color = colors.mutedText) }
+                    if (isNewRecord) {
+                        Text("新紀錄！", color = colors.accent, fontWeight = FontWeight.Black)
+                    }
+                }
+            },
             confirmButton = {
                 Column(
                     Modifier.fillMaxWidth(),
@@ -218,9 +256,15 @@ fun GameScreen(
                     if (isUndoingLoss) {
                         Text("正在恢復棋局…", color = colors.text, modifier = Modifier.padding(12.dp))
                     } else if (!won && canUndoLoss) {
-                        RetroButton("悔棋(限一次)", colors, onClick = viewModel::undoLoss, modifier = Modifier.fillMaxWidth())
+                        RetroButton("悔棋(剩餘 ${game.undosRemaining} 次)", colors, onClick = viewModel::undoLoss, modifier = Modifier.fillMaxWidth())
                     }
                     if (!isUndoingLoss) {
+                        RetroButton(
+                            "分享結果",
+                            colors,
+                            onClick = { shareResult(context, game) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
                         RetroButton("再玩一次", colors, onClick = {
                             viewModel.dismissResultDialog()
                             viewModel.restartGame()
@@ -246,7 +290,7 @@ private fun ClassicGameLayout(
     actions: GameLayoutActions,
 ) {
     Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
-        AppHeader(colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings, actions.onExit)
+        AppHeader(game, colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings)
         Spacer(Modifier.height(8.dp))
         RetroPanel(colors, Modifier.fillMaxSize()) {
             if (landscape) {
@@ -309,7 +353,7 @@ private fun HandheldGameLayout(
                 Modifier.width(216.dp).fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(7.dp),
             ) {
-                HandheldHeader(colors, fullscreen, actions, stacked = true)
+                HandheldHeader(game, colors, fullscreen, actions, stacked = true)
                 RetroPanel(colors, Modifier.weight(1f).fillMaxWidth()) {
                     Column(
                         Modifier.fillMaxSize(),
@@ -327,7 +371,7 @@ private fun HandheldGameLayout(
             Modifier.fillMaxSize().background(colors.desktop).padding(6.dp),
             verticalArrangement = Arrangement.spacedBy(7.dp),
         ) {
-            HandheldHeader(colors, fullscreen, actions, stacked = false)
+            HandheldHeader(game, colors, fullscreen, actions, stacked = false)
             RetroPanel(colors, Modifier.fillMaxWidth()) {
                 StatusPanel(game.remainingMines, game.status, elapsedMillis, colors, actions.onRestart)
             }
@@ -360,18 +404,19 @@ private fun SharedGameBoard(
         showLossDetails = showLossDetails,
         onReveal = actions.onReveal,
         onToggleFlag = actions.onToggleFlag,
-        onLongPress = actions.onLongPress,
         modifier = modifier.sunkenBorder(colors),
     )
 }
 
 @Composable
 private fun HandheldHeader(
+    game: GameState,
     colors: RetroColors,
     fullscreen: Boolean,
     actions: GameLayoutActions,
     stacked: Boolean,
 ) {
+    val detail = "${game.difficulty.label} · ${game.width}×${game.height}"
     if (stacked) {
         Column(
             Modifier.fillMaxWidth().background(colors.panel).raisedBorder(colors).padding(6.dp),
@@ -379,6 +424,7 @@ private fun HandheldHeader(
         ) {
             Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 19.sp)
             Text("POCKET SWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+            Text(detail, color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
             Spacer(Modifier.height(5.dp))
             HandheldToolButtons(colors, fullscreen, actions)
         }
@@ -390,6 +436,7 @@ private fun HandheldHeader(
             Column(Modifier.weight(1f)) {
                 Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 20.sp)
                 Text("POCKET SWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+                Text(detail, color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 9.sp)
             }
             HandheldToolButtons(colors, fullscreen, actions)
         }
@@ -419,13 +466,6 @@ private fun HandheldToolButtons(colors: RetroColors, fullscreen: Boolean, action
             contentDescription = "設定",
             colors = colors,
             onClick = actions.onSettings,
-            modifier = Modifier.size(48.dp),
-        )
-        RetroIconButton(
-            imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-            contentDescription = "將應用程式移至背景",
-            colors = colors,
-            onClick = actions.onExit,
             modifier = Modifier.size(48.dp),
         )
     }
@@ -560,17 +600,23 @@ private fun HandheldStartButton(colors: RetroColors, onClick: () -> Unit) {
 
 @Composable
 private fun AppHeader(
+    game: GameState,
     colors: RetroColors,
     fullscreen: Boolean,
     onRecords: () -> Unit,
     onFullscreen: () -> Unit,
     onSettings: () -> Unit,
-    onExit: () -> Unit,
 ) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().macTitleBar(colors), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 24.sp)
             Text("MINESWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+            Text(
+                "${game.difficulty.label} · ${game.width} × ${game.height} · ${game.mineCount} 雷",
+                color = colors.mutedText,
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+            )
         }
         RetroIconButton(
             R.drawable.ic_history,
@@ -596,14 +642,6 @@ private fun AppHeader(
             onClick = onSettings,
             modifier = Modifier.size(48.dp),
         )
-        Spacer(Modifier.width(6.dp))
-        RetroIconButton(
-            imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-            contentDescription = "將應用程式移至背景",
-            colors = colors,
-            onClick = onExit,
-            modifier = Modifier.size(48.dp),
-        )
     }
 }
 
@@ -620,7 +658,10 @@ private fun StatusPanel(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        SevenSegmentDisplay(remainingMines.coerceIn(-99, 999).toString().padStart(3, '0'), colors)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("剩餘地雷", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+            SevenSegmentDisplay(remainingMines.coerceIn(-99, 999).toString().padStart(3, '0'), colors)
+        }
         RetroButton(
             text = when (status) {
                 GameStatus.READY -> "🙂"
@@ -630,9 +671,12 @@ private fun StatusPanel(
             },
             colors = colors,
             onClick = onRestart,
-            modifier = Modifier.size(52.dp),
+            modifier = Modifier.size(52.dp).semantics { contentDescription = "重新開始遊戲" },
         )
-        ElapsedTimeDisplay(elapsedMillis, colors)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("時間", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+            ElapsedTimeDisplay(elapsedMillis, colors)
+        }
     }
 }
 
@@ -669,6 +713,7 @@ private fun GameControls(
 @Composable
 private fun NewGameDialog(
     colors: RetroColors,
+    bestTimes: Map<Difficulty, Long>,
     onDismiss: () -> Unit,
     onDifficulty: (Difficulty) -> Unit,
     onCustom: () -> Unit,
@@ -680,8 +725,10 @@ private fun NewGameDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(Difficulty.BEGINNER, Difficulty.INTERMEDIATE, Difficulty.EXPERT).forEach { difficulty ->
+                    val best = bestTimes[difficulty]
+                    val bestLabel = best?.let { "\n最佳 ${formatDuration(it)}" }.orEmpty()
                     RetroButton(
-                        "${difficulty.label}  ${difficulty.width} × ${difficulty.height} / ${difficulty.mines} 雷",
+                        "${difficulty.label}  ${difficulty.width} × ${difficulty.height} / ${difficulty.mines} 雷$bestLabel",
                         colors,
                         onClick = { onDifficulty(difficulty) },
                         modifier = Modifier.fillMaxWidth(),
@@ -708,8 +755,12 @@ private fun CustomGameDialog(
     var width by remember { mutableIntStateOf(16) }
     var height by remember { mutableIntStateOf(16) }
     var mines by remember { mutableIntStateOf(40) }
+    var pendingDelete by remember { mutableStateOf<CustomBoardPreset?>(null) }
     val maxMines = width * height - 9
-    if (mines > maxMines) mines = maxMines
+    val safeMines = mines.coerceIn(1, maxMines)
+    LaunchedEffect(maxMines) {
+        if (mines != safeMines) mines = safeMines
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = colors.panel,
@@ -730,9 +781,9 @@ private fun CustomGameDialog(
                                     mines = preset.mines
                                 },
                                 modifier = Modifier.weight(1f),
-                                selected = preset == CustomBoardPreset(width, height, mines),
+                                selected = preset == CustomBoardPreset(width, height, safeMines),
                             )
-                            RetroButton("刪除", colors, onClick = { onDelete(preset) })
+                            RetroButton("刪除", colors, onClick = { pendingDelete = preset })
                         }
                         Spacer(Modifier.height(6.dp))
                     }
@@ -743,15 +794,15 @@ private fun CustomGameDialog(
                 }
                 NumberSlider("寬度", width, MinesweeperEngine.MIN_SIZE..MinesweeperEngine.MAX_WIDTH, colors) { width = it }
                 NumberSlider("高度", height, MinesweeperEngine.MIN_SIZE..MinesweeperEngine.MAX_HEIGHT, colors) { height = it }
-                NumberSlider("地雷", mines, 1..maxMines, colors) { mines = it }
-                val density = mines * 100f / (width * height)
+                NumberSlider("地雷", safeMines, 1..maxMines, colors) { mines = it }
+                val density = safeMines * 100f / (width * height)
                 Text("地雷密度：%.1f%%".format(density), color = colors.mutedText)
                 Spacer(Modifier.height(8.dp))
                 RetroButton(
                     "儲存設定 (${presets.size}/${SettingsRepository.MAX_CUSTOM_BOARDS})",
                     colors,
                     onClick = {
-                        val preset = CustomBoardPreset(width, height, mines)
+                        val preset = CustomBoardPreset(width, height, safeMines)
                         when {
                             preset in presets -> Toast.makeText(context, "此棋盤已儲存", Toast.LENGTH_SHORT).show()
                             presets.size >= SettingsRepository.MAX_CUSTOM_BOARDS -> Toast.makeText(context, "最多只能儲存 3 個自訂棋盤", Toast.LENGTH_SHORT).show()
@@ -765,9 +816,22 @@ private fun CustomGameDialog(
                 )
             }
         },
-        confirmButton = { RetroButton("開始", colors, onClick = { onStart(width, height, mines) }, selected = true) },
+        confirmButton = { RetroButton("開始", colors, onClick = { onStart(width, height, safeMines) }, selected = true) },
         dismissButton = { RetroButton("取消", colors, onDismiss) },
     )
+    pendingDelete?.let { preset ->
+        ConfirmDialog(
+            colors = colors,
+            title = "刪除自訂棋盤？",
+            text = "確定要刪除「${preset.label}」嗎？此動作無法復原。",
+            confirmText = "刪除",
+            onDismiss = { pendingDelete = null },
+            onConfirm = {
+                pendingDelete = null
+                onDelete(preset)
+            },
+        )
+    }
 }
 
 @Composable
@@ -781,28 +845,62 @@ private fun NumberSlider(label: String, value: Int, range: IntRange, colors: Ret
     )
 }
 
+private enum class ResultFilter(val label: String, val type: ResultType?) {
+    ALL("全部", null),
+    WON("勝利", ResultType.WON),
+    LOST("失敗", ResultType.LOST),
+    ABANDONED("放棄", ResultType.ABANDONED),
+}
+
 @Composable
 fun RecordsScreen(viewModel: GameViewModel, results: List<GameResult>, colors: RetroColors) {
     val context = LocalContext.current
     var confirmClear by remember { mutableStateOf(false) }
+    var filter by remember { mutableStateOf(ResultFilter.ALL) }
+    var pendingDelete by remember { mutableStateOf<GameResult?>(null) }
+    val filteredResults = remember(results, filter) {
+        results.filter { filter.type == null || it.resultType == filter.type }
+    }
     Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
         ScreenHeader("遊戲紀錄", colors, onBack = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.GAME) })
         Spacer(Modifier.height(8.dp))
-        if (results.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("尚無遊戲紀錄", color = colors.mutedText, fontWeight = FontWeight.Bold)
-            }
-        } else {
-            LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(results, key = GameResult::id) { result ->
-                    ResultCard(
-                        result,
-                        colors,
-                        onCopy = { copyResult(context, result) },
-                        onShare = { shareResult(context, result) },
-                    )
+        if (results.isNotEmpty()) {
+            ChoiceRow(
+                ResultFilter.entries,
+                filter,
+                ResultFilter::label,
+                colors,
+                { filter = it },
+                Modifier.fillMaxWidth(),
+            )
+            Spacer(Modifier.height(8.dp))
+        }
+        when {
+            results.isEmpty() -> {
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text("尚無遊戲紀錄", color = colors.mutedText, fontWeight = FontWeight.Bold)
                 }
             }
+            filteredResults.isEmpty() -> {
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text("沒有符合條件的紀錄", color = colors.mutedText, fontWeight = FontWeight.Bold)
+                }
+            }
+            else -> {
+                LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(filteredResults, key = GameResult::id) { result ->
+                        ResultCard(
+                            result,
+                            colors,
+                            onCopy = { copyResult(context, result) },
+                            onShare = { shareResult(context, result) },
+                            onDelete = { pendingDelete = result },
+                        )
+                    }
+                }
+            }
+        }
+        if (results.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
             RetroButton("清除全部紀錄", colors, onClick = { confirmClear = true }, modifier = Modifier.fillMaxWidth())
         }
@@ -820,12 +918,30 @@ fun RecordsScreen(viewModel: GameViewModel, results: List<GameResult>, colors: R
             },
         )
     }
+    pendingDelete?.let { result ->
+        ConfirmDialog(
+            colors,
+            title = "刪除這筆紀錄？",
+            text = "刪除後無法復原，但不會影響目前遊戲與設定。",
+            confirmText = "刪除",
+            onDismiss = { pendingDelete = null },
+            onConfirm = {
+                pendingDelete = null
+                viewModel.deleteResult(result.id)
+            },
+        )
+    }
 }
 
 @Composable
-private fun ResultCard(result: GameResult, colors: RetroColors, onCopy: () -> Unit, onShare: () -> Unit) {
-    val dark = colors.desktop.luminanceForUi() < 0.5f
-    val visual = resultVisual(result.resultType, dark)
+private fun ResultCard(
+    result: GameResult,
+    colors: RetroColors,
+    onCopy: () -> Unit,
+    onShare: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    val visual = resultVisual(result.resultType, colors)
     RetroPanel(colors, Modifier.fillMaxWidth()) {
         Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
             Box(Modifier.width(6.dp).fillMaxHeight().background(visual.background))
@@ -866,6 +982,7 @@ private fun ResultCard(result: GameResult, colors: RetroColors, onCopy: () -> Un
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     RetroButton("複製", colors, onCopy, Modifier.weight(1f))
                     RetroButton("分享", colors, onShare, Modifier.weight(1f), selected = true)
+                    RetroButton("刪除", colors, onDelete, Modifier.weight(1f))
                 }
             }
         }
@@ -878,23 +995,36 @@ private data class ResultVisual(
     val foreground: Color,
 )
 
-private fun resultVisual(resultType: ResultType, dark: Boolean): ResultVisual = when (resultType) {
-    ResultType.WON -> ResultVisual(
-        R.drawable.ic_result_won,
-        if (dark) Color(0xFF237A35) else Color(0xFF2E7D32),
-        Color.White,
-    )
-    ResultType.LOST -> ResultVisual(
-        R.drawable.ic_result_lost,
-        if (dark) Color(0xFFC93B3B) else Color(0xFFC62828),
-        Color.White,
-    )
-    ResultType.ABANDONED -> ResultVisual(
-        R.drawable.ic_result_abandoned,
-        if (dark) Color(0xFFB87800) else Color(0xFFF9A825),
-        if (dark) Color.White else Color(0xFF171000),
-    )
+private fun resultVisual(resultType: ResultType, colors: RetroColors): ResultVisual {
+    if (colors.style == RetroStyle.MACINTOSH) {
+        return when (resultType) {
+            ResultType.WON -> ResultVisual(R.drawable.ic_result_won, colors.accent, contrastingText(colors.accent))
+            ResultType.LOST -> ResultVisual(R.drawable.ic_result_lost, colors.panelDark, contrastingText(colors.panelDark))
+            ResultType.ABANDONED -> ResultVisual(R.drawable.ic_result_abandoned, colors.mutedText, contrastingText(colors.mutedText))
+        }
+    }
+    val dark = colors.desktop.luminanceForUi() < 0.5f
+    return when (resultType) {
+        ResultType.WON -> ResultVisual(
+            R.drawable.ic_result_won,
+            if (dark) Color(0xFF237A35) else Color(0xFF2E7D32),
+            Color.White,
+        )
+        ResultType.LOST -> ResultVisual(
+            R.drawable.ic_result_lost,
+            if (dark) Color(0xFFC93B3B) else Color(0xFFC62828),
+            Color.White,
+        )
+        ResultType.ABANDONED -> ResultVisual(
+            R.drawable.ic_result_abandoned,
+            if (dark) Color(0xFFB87800) else Color(0xFFF9A825),
+            if (dark) Color.White else Color(0xFF171000),
+        )
+    }
 }
+
+private fun contrastingText(background: Color): Color =
+    if (background.luminanceForUi() > 0.5f) Color.Black else Color.White
 
 @Composable
 fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: RetroColors) {
@@ -920,6 +1050,27 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
         }
         RetroPanel(colors, Modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                SectionTitle("復古風格", colors)
+                ChoiceRow(
+                    RetroStyle.entries,
+                    settings.retroStyle,
+                    RetroStyle::label,
+                    colors,
+                    viewModel::setRetroStyle,
+                    Modifier.fillMaxWidth(),
+                )
+                Text(
+                    when (settings.retroStyle) {
+                        RetroStyle.WINDOWS -> "固定天空藍配色"
+                        RetroStyle.MACINTOSH -> "麥金塔風格使用固定黑白配色"
+                    },
+                    color = colors.mutedText,
+                    fontSize = 12.sp,
+                )
+            }
+        }
+        RetroPanel(colors, Modifier.fillMaxWidth()) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 SectionTitle("外觀模式", colors)
                 ChoiceRow(
                     AppearanceMode.entries,
@@ -931,7 +1082,6 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
                 )
             }
         }
-        ThemeSettings(settings, colors, viewModel::setThemeHue)
         RetroPanel(colors, Modifier.fillMaxWidth()) {
             Column {
                 SettingSwitch("遊戲音效", settings.soundEnabled, colors, viewModel::setSound)
@@ -955,53 +1105,6 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
             },
             confirmButton = { RetroButton("知道了", colors, onClick = { showHelp = false }, selected = true) },
         )
-    }
-}
-
-private data class HuePreset(val name: String, val hue: Float)
-
-private val HuePresets = listOf(
-    HuePreset("活力紅", 4f),
-    HuePreset("陽光黃", 46f),
-    HuePreset("青檸綠", 92f),
-    HuePreset("湖水青", 172f),
-    HuePreset("天空藍", 210f),
-    HuePreset("葡萄紫", 278f),
-)
-
-@Composable
-private fun ThemeSettings(settings: AppSettings, colors: RetroColors, onHue: (Float) -> Unit) {
-    val matched = HuePresets.firstOrNull { kotlin.math.abs(it.hue - settings.themeHue) < 1f }
-    RetroPanel(colors, Modifier.fillMaxWidth()) {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            SectionTitle("主題色${matched?.let { " · ${it.name}" } ?: " · 自訂"}", colors)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                HuePresets.forEach { preset ->
-                    val color = colorFromHue(preset.hue, false)
-                    Box(
-                        Modifier
-                            .size(42.dp)
-                            .background(color, CircleShape)
-                            .border(if (matched == preset) 4.dp else 1.dp, if (matched == preset) colors.text else colors.panelDark, CircleShape)
-                            .clickable { onHue(preset.hue) },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        if (matched == preset) Text("✓", color = if (color.luminanceForUi() > .5f) Color.Black else Color.White, fontWeight = FontWeight.Black)
-                    }
-                }
-            }
-            Text("拖曳色彩滑桿即可即時套用", color = colors.mutedText)
-            Slider(
-                value = settings.themeHue,
-                onValueChange = onHue,
-                valueRange = 0f..360f,
-                colors = SliderDefaults.colors(
-                    thumbColor = colors.accent,
-                    activeTrackColor = colors.accent,
-                    inactiveTrackColor = colors.panelDark,
-                ),
-            )
-        }
     }
 }
 
@@ -1046,17 +1149,26 @@ private fun ConfirmDialog(
     )
 }
 
+internal fun bestTimesByDifficulty(results: List<GameResult>): Map<Difficulty, Long> = results
+    .filter { it.resultType == ResultType.WON }
+    .groupBy(GameResult::difficulty)
+    .mapValues { (_, entries) -> entries.minOf(GameResult::elapsedMillis) }
+
 private fun copyResult(context: Context, result: GameResult) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     clipboard.setPrimaryClip(ClipData.newPlainText("踩地雷遊戲結果", result.shareText()))
     Toast.makeText(context, "遊戲結果已複製", Toast.LENGTH_SHORT).show()
 }
 
-private fun shareResult(context: Context, result: GameResult) {
+private fun shareResult(context: Context, result: GameResult) = shareResultText(context, result.shareText())
+
+private fun shareResult(context: Context, game: GameState) = shareResultText(context, game.shareText())
+
+private fun shareResultText(context: Context, text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_SUBJECT, "踩地雷遊戲結果")
-        putExtra(Intent.EXTRA_TEXT, result.shareText())
+        putExtra(Intent.EXTRA_TEXT, text)
     }
     context.startActivity(Intent.createChooser(intent, "分享遊戲結果"))
 }

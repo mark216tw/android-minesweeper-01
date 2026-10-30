@@ -48,9 +48,9 @@ object MinesweeperEngine {
     }
 
     fun undoLoss(previous: GameState, lost: GameState): GameState? {
-        if (previous.status != GameStatus.ACTIVE || previous.undoUsed || lost.status != GameStatus.LOST) return null
+        if (previous.status != GameStatus.ACTIVE || !previous.canUndo || lost.status != GameStatus.LOST) return null
         if (previous.width != lost.width || previous.height != lost.height || previous.mineCount != lost.mineCount) return null
-        return previous.copy(undoUsed = true)
+        return previous.copy(undoCount = previous.undoCount + 1)
     }
 
     private fun generateMines(state: GameState, firstIndex: Int, random: Random): GameState {

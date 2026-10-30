@@ -2,10 +2,14 @@ package com.tainanlins5.minesweeper
 
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +20,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.tainanlins5.minesweeper.domain.GameStatus
 import com.tainanlins5.minesweeper.ui.GameScreen
 import com.tainanlins5.minesweeper.ui.MinesweeperTheme
 import com.tainanlins5.minesweeper.ui.RecordsScreen
@@ -36,6 +40,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: GameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
             val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -46,16 +51,27 @@ class MainActivity : ComponentActivity() {
             val loaded by viewModel.isLoaded.collectAsStateWithLifecycle()
             val resultDialogVisible by viewModel.resultDialogVisible.collectAsStateWithLifecycle()
 
+            LaunchedEffect(loaded, screen, game.status) {
+                window.decorView.keepScreenOn =
+                    loaded && screen == AppScreen.GAME && game.status == GameStatus.ACTIVE
+            }
+
             BackHandler(enabled = screen != AppScreen.GAME) {
                 viewModel.showScreen(AppScreen.GAME)
             }
 
             MinesweeperTheme(settings) { colors, dark ->
-                SideEffect {
+                LaunchedEffect(colors.desktop, dark) {
+                    val barColor = colors.desktop.toArgb()
+                    enableEdgeToEdge(
+                        statusBarStyle = SystemBarStyle.auto(barColor, barColor) { dark },
+                        navigationBarStyle = SystemBarStyle.auto(barColor, barColor) { dark },
+                    )
+                    window.disableNavigationBarContrast()
+                }
+
+                LaunchedEffect(settings.fullscreen, dark) {
                     val controller = WindowCompat.getInsetsController(window, window.decorView)
-                    WindowCompat.setDecorFitsSystemWindows(window, false)
-                    window.statusBarColor = colors.desktop.toArgb()
-                    window.navigationBarColor = colors.desktop.toArgb()
                     controller.isAppearanceLightStatusBars = !dark
                     controller.isAppearanceLightNavigationBars = !dark
                     controller.systemBarsBehavior =
@@ -92,7 +108,6 @@ class MainActivity : ComponentActivity() {
                                 colors,
                                 flagMode,
                                 resultDialogVisible,
-                                onMoveToBackground = { moveTaskToBack(true) },
                             )
                             AppScreen.RECORDS -> RecordsScreen(viewModel, results, colors)
                             AppScreen.SETTINGS -> SettingsScreen(viewModel, settings, colors)
@@ -131,5 +146,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+@Suppress("DEPRECATION")
+private fun Window.disableNavigationBarContrast() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        isNavigationBarContrastEnforced = false
     }
 }

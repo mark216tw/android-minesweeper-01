@@ -26,7 +26,7 @@ data class ActiveGameEntity(
     val minesGenerated: Boolean,
     val elapsedMillis: Long,
     val encodedCells: String,
-    val undoUsed: Boolean = false,
+    val undoCount: Int = 0,
 ) {
     companion object {
         const val ACTIVE_GAME_ID = 1

@@ -75,7 +75,7 @@ private fun GameState.toEntity() = ActiveGameEntity(
     status = status.name,
     minesGenerated = minesGenerated,
     elapsedMillis = elapsedMillis,
-    undoUsed = undoUsed,
+    undoCount = undoCount,
     encodedCells = buildString(cells.size * 2) {
         cells.forEach { cell ->
             val value =
@@ -110,6 +110,6 @@ private fun ActiveGameEntity.toModel(): GameState {
         cells = restoredCells,
         minesGenerated = minesGenerated,
         elapsedMillis = elapsedMillis,
-        undoUsed = undoUsed,
+        undoCount = undoCount,
     )
 }

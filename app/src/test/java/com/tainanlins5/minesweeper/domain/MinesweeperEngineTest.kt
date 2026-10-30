@@ -50,7 +50,7 @@ class MinesweeperEngineTest {
     }
 
     @Test
-    fun undoLossRestoresPreviousStateAndMarksUndoUsed() {
+    fun undoLossRestoresPreviousStateAndIncrementsUndoCount() {
         val active = MinesweeperEngine.reveal(
             MinesweeperEngine.newGame(Difficulty.BEGINNER),
             0,
@@ -65,20 +65,32 @@ class MinesweeperEngineTest {
         assertEquals(GameStatus.ACTIVE, restored.status)
         assertEquals(active.cells, restored.cells)
         assertEquals(active.elapsedMillis, restored.elapsedMillis)
-        assertTrue(restored.undoUsed)
+        assertEquals(1, restored.undoCount)
     }
 
     @Test
-    fun undoLossCanOnlyBeUsedOncePerGame() {
-        val active = MinesweeperEngine.reveal(
-            MinesweeperEngine.newGame(Difficulty.BEGINNER),
-            0,
-            Random(12),
-        ).copy(undoUsed = true)
-        val mine = active.cells.indexOfFirst { it.hasMine }
-        val lost = MinesweeperEngine.reveal(active, mine)
+    fun undoLossUsesDifficultyLimit() {
+        mapOf(
+            Difficulty.BEGINNER to 1,
+            Difficulty.INTERMEDIATE to 2,
+            Difficulty.EXPERT to 3,
+            Difficulty.CUSTOM to 3,
+        ).forEach { (difficulty, limit) ->
+            var active = if (difficulty == Difficulty.CUSTOM) {
+                GameState(5, 5, 1, Difficulty.CUSTOM, GameStatus.ACTIVE, boardWithSingleMine(), true)
+            } else {
+                MinesweeperEngine.reveal(MinesweeperEngine.newGame(difficulty), 0, Random(12))
+            }
 
-        assertEquals(null, MinesweeperEngine.undoLoss(active, lost))
+            repeat(limit) { used ->
+                val restored = requireNotNull(MinesweeperEngine.undoLoss(active, loseGame(active)))
+                assertEquals(used + 1, restored.undoCount)
+                assertEquals(limit - used - 1, restored.undosRemaining)
+                active = restored
+            }
+
+            assertEquals(null, MinesweeperEngine.undoLoss(active, loseGame(active)))
+        }
     }
 
     @Test
@@ -142,7 +154,12 @@ class MinesweeperEngineTest {
 
         requireNotNull(restored)
         assertEquals(active.cells, restored.cells)
-        assertTrue(restored.undoUsed)
+        assertEquals(1, restored.undoCount)
+    }
+
+    private fun loseGame(active: GameState): GameState {
+        val mine = active.cells.indexOfFirst { it.hasMine }
+        return MinesweeperEngine.reveal(active, mine)
     }
 
     private fun boardWithSingleMine(): List<Cell> = List(25) { index ->

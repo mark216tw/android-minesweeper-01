@@ -1,10 +1,16 @@
 package com.tainanlins5.minesweeper.domain
 
-enum class Difficulty(val label: String, val width: Int, val height: Int, val mines: Int) {
-    BEGINNER("初級", 9, 9, 10),
-    INTERMEDIATE("中級", 16, 16, 40),
-    EXPERT("高級", 30, 16, 99),
-    CUSTOM("自訂", 0, 0, 0),
+enum class Difficulty(
+    val label: String,
+    val width: Int,
+    val height: Int,
+    val mines: Int,
+    val undoLimit: Int,
+) {
+    BEGINNER("初級", 9, 9, 10, 1),
+    INTERMEDIATE("中級", 16, 16, 40, 2),
+    EXPERT("高級", 30, 16, 99, 3),
+    CUSTOM("自訂", 0, 0, 0, 3),
 }
 
 enum class GameStatus {
@@ -37,9 +43,12 @@ data class GameState(
     val cells: List<Cell> = List(width * height) { Cell() },
     val minesGenerated: Boolean = false,
     val elapsedMillis: Long = 0L,
-    val undoUsed: Boolean = false,
+    val undoCount: Int = 0,
 ) {
     val flagCount: Int get() = cells.count(Cell::isFlagged)
     val remainingMines: Int get() = mineCount - flagCount
     val hasStarted: Boolean get() = status != GameStatus.READY || minesGenerated
+    val undoLimit: Int get() = difficulty.undoLimit
+    val undosRemaining: Int get() = (undoLimit - undoCount).coerceAtLeast(0)
+    val canUndo: Boolean get() = undoCount < undoLimit
 }

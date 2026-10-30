@@ -3,10 +3,12 @@ package com.tainanlins5.minesweeper.data
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 private val Context.settingsDataStore by preferencesDataStore(name = "settings")
@@ -22,15 +24,20 @@ enum class GameLayout(val label: String) {
     HANDHELD("復古掌機版"),
 }
 
+enum class RetroStyle(val label: String) {
+    WINDOWS("Windows 灰"),
+    MACINTOSH("麥金塔"),
+}
+
 data class AppSettings(
     val appearanceMode: AppearanceMode = AppearanceMode.SYSTEM,
-    val themeHue: Float = 190f,
     val fullscreen: Boolean = false,
     val soundEnabled: Boolean = true,
     val vibrationEnabled: Boolean = true,
     val flagModeDefault: Boolean = false,
     val customBoards: List<CustomBoardPreset> = emptyList(),
     val gameLayout: GameLayout = GameLayout.CLASSIC,
+    val retroStyle: RetroStyle = RetroStyle.WINDOWS,
 )
 
 data class CustomBoardPreset(
@@ -44,29 +51,33 @@ data class CustomBoardPreset(
 class SettingsRepository(private val context: Context) {
     private object Keys {
         val appearance = stringPreferencesKey("appearance")
-        val themeHue = floatPreferencesKey("theme_hue")
         val fullscreen = booleanPreferencesKey("fullscreen")
         val sound = booleanPreferencesKey("sound")
         val vibration = booleanPreferencesKey("vibration")
         val flagModeDefault = booleanPreferencesKey("flag_mode_default")
         val customBoards = stringPreferencesKey("custom_boards")
         val gameLayout = stringPreferencesKey("game_layout")
+        val retroStyle = stringPreferencesKey("retro_style")
     }
 
-    val settings: Flow<AppSettings> = context.settingsDataStore.data.map { values ->
-        AppSettings(
-            appearanceMode = values[Keys.appearance]
-                ?.let { runCatching { AppearanceMode.valueOf(it) }.getOrNull() }
-                ?: AppearanceMode.SYSTEM,
-            themeHue = values[Keys.themeHue] ?: 190f,
-            fullscreen = values[Keys.fullscreen] ?: false,
-            soundEnabled = values[Keys.sound] ?: true,
-            vibrationEnabled = values[Keys.vibration] ?: true,
-            flagModeDefault = values[Keys.flagModeDefault] ?: false,
-            customBoards = decodeCustomBoards(values[Keys.customBoards].orEmpty()),
-            gameLayout = decodeGameLayout(values[Keys.gameLayout]),
-        )
-    }
+    val settings: Flow<AppSettings> = context.settingsDataStore.data
+        .catch { error ->
+            if (error is IOException) emit(emptyPreferences()) else throw error
+        }
+        .map { values ->
+            AppSettings(
+                appearanceMode = values[Keys.appearance]
+                    ?.let { runCatching { AppearanceMode.valueOf(it) }.getOrNull() }
+                    ?: AppearanceMode.SYSTEM,
+                fullscreen = values[Keys.fullscreen] ?: false,
+                soundEnabled = values[Keys.sound] ?: true,
+                vibrationEnabled = values[Keys.vibration] ?: true,
+                flagModeDefault = values[Keys.flagModeDefault] ?: false,
+                customBoards = decodeCustomBoards(values[Keys.customBoards].orEmpty()),
+                gameLayout = decodeGameLayout(values[Keys.gameLayout]),
+                retroStyle = decodeRetroStyle(values[Keys.retroStyle]),
+            )
+        }
 
     suspend fun setAppearance(value: AppearanceMode) = context.settingsDataStore.edit {
         it[Keys.appearance] = value.name
@@ -76,8 +87,8 @@ class SettingsRepository(private val context: Context) {
         it[Keys.gameLayout] = value.name
     }
 
-    suspend fun setThemeHue(value: Float) = context.settingsDataStore.edit {
-        it[Keys.themeHue] = value.coerceIn(0f, 360f)
+    suspend fun setRetroStyle(value: RetroStyle) = context.settingsDataStore.edit {
+        it[Keys.retroStyle] = value.name
     }
 
     suspend fun setFullscreen(value: Boolean) = context.settingsDataStore.edit {
@@ -130,3 +141,7 @@ internal fun decodeCustomBoards(value: String): List<CustomBoardPreset> = value
 internal fun decodeGameLayout(value: String?): GameLayout = value
     ?.let { runCatching { GameLayout.valueOf(it) }.getOrNull() }
     ?: GameLayout.CLASSIC
+
+internal fun decodeRetroStyle(value: String?): RetroStyle = value
+    ?.let { runCatching { RetroStyle.valueOf(it) }.getOrNull() }
+    ?: RetroStyle.WINDOWS

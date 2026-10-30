@@ -2,6 +2,7 @@ package com.tainanlins5.minesweeper
 
 import android.app.Application
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tainanlins5.minesweeper.data.AppSettings
@@ -9,6 +10,7 @@ import com.tainanlins5.minesweeper.data.AppearanceMode
 import com.tainanlins5.minesweeper.data.CustomBoardPreset
 import com.tainanlins5.minesweeper.data.GameResult
 import com.tainanlins5.minesweeper.data.GameLayout
+import com.tainanlins5.minesweeper.data.RetroStyle
 import com.tainanlins5.minesweeper.domain.Difficulty
 import com.tainanlins5.minesweeper.domain.GameState
 import com.tainanlins5.minesweeper.domain.GameStatus
@@ -17,10 +19,11 @@ import com.tainanlins5.minesweeper.domain.ResultType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,8 +34,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 enum class AppScreen {
@@ -80,11 +81,19 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private var isAppResumed = false
     private var stateBeforeLoss: GameState? = null
     private var lossResultJob: Deferred<Long>? = null
-    private val persistenceMutex = Mutex()
+    private val persistenceQueue = Channel<suspend () -> Unit>(Channel.UNLIMITED)
     val canUndoLoss = MutableStateFlow(false)
     val isUndoingLoss = MutableStateFlow(false)
 
     init {
+        viewModelScope.launch {
+            for (task in persistenceQueue) {
+                withContext(Dispatchers.IO) {
+                    runCatching { task() }
+                        .onFailure { Log.e(TAG, "Failed to persist game state", it) }
+                }
+            }
+        }
         viewModelScope.launch {
             val (restored, defaultFlagMode) = withContext(Dispatchers.IO) {
                 gameRepository.loadActiveGame() to settingsRepository.settings.first().flagModeDefault
@@ -177,11 +186,17 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         canUndoLoss.value = false
         isUndoingLoss.value = true
         viewModelScope.launch {
-            val resultId = resultJob.await()
-            persistenceMutex.withLock {
-                withContext(Dispatchers.IO) {
-                    gameRepository.deleteResultAndRestoreActiveGame(resultId, restored)
-                }
+            val resultId = runCatching { resultJob.await() }.getOrNull()
+            if (resultId == null) {
+                clearLossUndo()
+                return@launch
+            }
+            val restoreJob = enqueuePersistenceWithResult {
+                gameRepository.deleteResultAndRestoreActiveGame(resultId, restored)
+            }
+            if (runCatching { restoreJob.await() }.isFailure) {
+                clearLossUndo()
+                return@launch
             }
             clearLossUndo()
             resultDialogVisible.value = false
@@ -215,6 +230,10 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         persist { gameRepository.clearResults() }
     }
 
+    fun deleteResult(id: Long) {
+        persist { gameRepository.deleteResult(id) }
+    }
+
     fun setAppearance(value: AppearanceMode) {
         viewModelScope.launch { settingsRepository.setAppearance(value) }
     }
@@ -223,8 +242,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch { settingsRepository.setGameLayout(value) }
     }
 
-    fun setThemeHue(value: Float) {
-        viewModelScope.launch { settingsRepository.setThemeHue(value) }
+    fun setRetroStyle(value: RetroStyle) {
+        viewModelScope.launch { settingsRepository.setRetroStyle(value) }
     }
 
     fun setFullscreen(value: Boolean) {
@@ -255,7 +274,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     private fun updateGame(updated: GameState, normalSound: SoundEffect, previous: GameState? = null) {
         val completed = updated.status == GameStatus.WON || updated.status == GameStatus.LOST
         if (completed) stopClock()
-        if (updated.status == GameStatus.LOST && previous != null && !previous.undoUsed) {
+        if (updated.status == GameStatus.LOST && previous != null && previous.canUndo) {
             stateBeforeLoss = previous
             canUndoLoss.value = true
         } else {
@@ -274,13 +293,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
             )
         }
         if (completed && updated.status == GameStatus.LOST) {
-            lossResultJob = viewModelScope.async {
-                persistenceMutex.withLock {
-                    withContext(Dispatchers.IO) {
-                        gameRepository.saveResultAndClearActiveGame(updated, ResultType.LOST)
-                    }
-                }
-            }
+            lossResultJob = enqueueLossSave(updated)
         } else {
             persist {
                 if (completed) {
@@ -303,11 +316,31 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun persist(block: suspend () -> Unit) {
-        viewModelScope.launch {
-            persistenceMutex.withLock {
-                withContext(Dispatchers.IO) { block() }
-            }
+        persistenceQueue.trySend(block)
+    }
+
+    private fun enqueuePersistenceWithResult(block: suspend () -> Unit): Deferred<Unit> {
+        val completion = CompletableDeferred<Unit>()
+        persistenceQueue.trySend {
+            runCatching { block() }
+                .onSuccess { completion.complete(Unit) }
+                .onFailure { completion.completeExceptionally(it) }
         }
+        return completion
+    }
+
+    private fun enqueueLossSave(state: GameState): Deferred<Long> {
+        val completion = CompletableDeferred<Long>()
+        persistenceQueue.trySend {
+            runCatching { gameRepository.saveResultAndClearActiveGame(state, ResultType.LOST) }
+                .onSuccess { completion.complete(it) }
+                .onFailure { completion.completeExceptionally(it) }
+        }
+        return completion
+    }
+
+    private companion object {
+        const val TAG = "GameViewModel"
     }
 
     private fun withCurrentElapsed(state: GameState, now: Long): GameState {
@@ -346,7 +379,38 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 internal fun elapsedAt(elapsedMillis: Long, startedAt: Long?, now: Long): Long =
     elapsedMillis + if (startedAt == null) 0L else (now - startedAt).coerceAtLeast(0L)
 
-fun GameResult.shareText(locale: Locale = Locale.getDefault()): String {
+fun GameResult.shareText(locale: Locale = Locale.getDefault()): String = buildShareText(
+    resultType = resultType,
+    difficulty = difficulty,
+    width = width,
+    height = height,
+    mineCount = mineCount,
+    elapsedMillis = elapsedMillis,
+    endedAtMillis = endedAtMillis,
+    locale = locale,
+)
+
+fun GameState.shareText(locale: Locale = Locale.getDefault()): String = buildShareText(
+    resultType = if (status == GameStatus.WON) ResultType.WON else ResultType.LOST,
+    difficulty = difficulty,
+    width = width,
+    height = height,
+    mineCount = mineCount,
+    elapsedMillis = elapsedMillis,
+    endedAtMillis = System.currentTimeMillis(),
+    locale = locale,
+)
+
+private fun buildShareText(
+    resultType: ResultType,
+    difficulty: Difficulty,
+    width: Int,
+    height: Int,
+    mineCount: Int,
+    elapsedMillis: Long,
+    endedAtMillis: Long,
+    locale: Locale,
+): String {
     val time = formatDuration(elapsedMillis)
     val date = SimpleDateFormat("yyyy/MM/dd HH:mm", locale).format(Date(endedAtMillis))
     return """踩地雷

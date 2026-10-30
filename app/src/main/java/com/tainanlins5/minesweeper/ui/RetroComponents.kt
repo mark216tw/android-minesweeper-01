@@ -19,28 +19,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tainanlins5.minesweeper.data.RetroStyle
 
 fun Modifier.raisedBorder(colors: RetroColors, width: Float = 3f): Modifier = drawBehind {
-    drawLine(colors.panelLight, Offset(0f, 0f), Offset(size.width, 0f), width)
-    drawLine(colors.panelLight, Offset(0f, 0f), Offset(0f, size.height), width)
-    drawLine(colors.panelDark, Offset(0f, size.height), Offset(size.width, size.height), width)
-    drawLine(colors.panelDark, Offset(size.width, 0f), Offset(size.width, size.height), width)
+    if (colors.style == RetroStyle.MACINTOSH) {
+        drawRect(colors.text, style = Stroke(2f))
+    } else {
+        drawLine(colors.panelLight, Offset(0f, 0f), Offset(size.width, 0f), width)
+        drawLine(colors.panelLight, Offset(0f, 0f), Offset(0f, size.height), width)
+        drawLine(colors.panelDark, Offset(0f, size.height), Offset(size.width, size.height), width)
+        drawLine(colors.panelDark, Offset(size.width, 0f), Offset(size.width, size.height), width)
+    }
 }
 
 fun Modifier.sunkenBorder(colors: RetroColors, width: Float = 3f): Modifier = drawBehind {
-    drawLine(colors.panelDark, Offset(0f, 0f), Offset(size.width, 0f), width)
-    drawLine(colors.panelDark, Offset(0f, 0f), Offset(0f, size.height), width)
-    drawLine(colors.panelLight, Offset(0f, size.height), Offset(size.width, size.height), width)
-    drawLine(colors.panelLight, Offset(size.width, 0f), Offset(size.width, size.height), width)
+    if (colors.style == RetroStyle.MACINTOSH) {
+        drawRect(colors.text, style = Stroke(2f))
+    } else {
+        drawLine(colors.panelDark, Offset(0f, 0f), Offset(size.width, 0f), width)
+        drawLine(colors.panelDark, Offset(0f, 0f), Offset(0f, size.height), width)
+        drawLine(colors.panelLight, Offset(0f, size.height), Offset(size.width, size.height), width)
+        drawLine(colors.panelLight, Offset(size.width, 0f), Offset(size.width, size.height), width)
+    }
+}
+
+fun Modifier.macTitleBar(colors: RetroColors): Modifier = if (colors.style == RetroStyle.MACINTOSH) {
+    drawBehind {
+        drawRect(colors.panel)
+        val stripeGap = 4.dp.toPx()
+        val stripeWidth = 1.dp.toPx()
+        var y = stripeWidth
+        while (y < size.height) {
+            drawLine(colors.text.copy(alpha = 0.14f), Offset(0f, y), Offset(size.width, y), stripeWidth)
+            y += stripeGap
+        }
+        val bottom = size.height - 1.dp.toPx()
+        drawLine(colors.text, Offset(0f, bottom), Offset(size.width, bottom), 2.dp.toPx())
+    }
+} else {
+    Modifier
 }
 
 @Composable
@@ -67,6 +94,7 @@ fun RetroButton(
             color = foreground,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
             fontSize = 15.sp,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -140,7 +168,7 @@ fun SevenSegmentDisplay(value: String, colors: RetroColors, modifier: Modifier =
     ) {
         Text(
             text = value,
-            color = Color(0xFFFF3333),
+            color = colors.displayText,
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.Black,
             fontSize = 22.sp,

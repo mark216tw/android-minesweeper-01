@@ -4,6 +4,34 @@
 
 ---
 
+## 2026-10-31 - v1.4.2（versionCode 10）
+
+### 目標
+將預設棋盤改為中級；取消結果視窗的分享選項，改在主畫面右上角提供遊戲畫面截圖分享。
+
+### 變更
+- `GameViewModel.kt`：新增 `DEFAULT_DIFFICULTY = Difficulty.INTERMEDIATE`，初始棋局改用它；移除未再使用的 `GameState.shareText()`。
+- `ui/Screens.kt`：`GameLayoutActions` 新增 `onShareScreenshot`；經典版 `AppHeader` 與掌機版 `HandheldToolButtons` 在「遊戲紀錄」右側加入分享圖示；結果視窗移除分享選項。
+- `ui/Screens.kt`：新增 `shareScreenshot()`、`Context.findActivity()`，以 Activity `decorView` 截圖並輸出 PNG。
+- `res/drawable/ic_share.xml`：新增分享畫面圖示。
+- `AndroidManifest.xml`、`res/xml/file_paths.xml`：新增 `FileProvider` 與快取圖片路徑，供分享截圖使用。
+- `app/src/test/.../DefaultDifficultyTest.kt`：新增預設難度測試。
+- `app/build.gradle.kts`：`versionCode` 10、`versionName` 1.4.2。
+- `docs/CHANGELOG.md`、`docs/USER_GUIDE.md`、`docs/PRIVACY.md`、`README.md`、`docs/RELEASE_NOTES.md`：同步更新預設難度與分享畫面說明。
+
+### 問題與解法
+- 直接截取 Activity `decorView` 可取得目前完整遊戲畫面，包含標頭與棋盤；結果對話框為獨立視窗，不會出現在截圖中。
+- Android 7.0 以後不可直接以 `file://` URI 分享快取檔案，改用 `FileProvider` 產生唯讀 content URI 並加上讀取授權旗標。
+- 截圖失敗或無可用分享目標時以 Toast 提示，不影響既有遊戲流程。
+
+### 待辦／已知限制
+- 截圖解析度依目前裝置畫面而定，尚未提供固定尺寸的成績卡片。
+- 尚未實機確認不同廠牌裝置的分享面板、截圖內容與掌機版四個圖示的窄螢幕排版。
+
+### 發布
+- 已建置 `app/build/outputs/apk/prerelease/app-prerelease.apk`（versionCode 10、versionName 1.4.2-prerelease）。
+- 發布 GitHub Release `v1.4.2-prerelease`，並上傳上述 APK。
+
 ## 2026-10-30 - v1.4.1（versionCode 9）
 
 ### 目標

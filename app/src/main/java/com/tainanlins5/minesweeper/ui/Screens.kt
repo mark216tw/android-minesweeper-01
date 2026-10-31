@@ -1,10 +1,14 @@
 package com.tainanlins5.minesweeper.ui
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,6 +62,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tainanlins5.minesweeper.BuildConfig
 import com.tainanlins5.minesweeper.GameViewModel
@@ -76,6 +82,8 @@ import com.tainanlins5.minesweeper.domain.MinesweeperEngine
 import com.tainanlins5.minesweeper.domain.ResultType
 import com.tainanlins5.minesweeper.formatDuration
 import com.tainanlins5.minesweeper.shareText
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -86,6 +94,7 @@ private data class GameConfig(val difficulty: Difficulty, val width: Int, val he
 
 private data class GameLayoutActions(
     val onRecords: () -> Unit,
+    val onShareScreenshot: () -> Unit,
     val onFullscreen: () -> Unit,
     val onSettings: () -> Unit,
     val onRestart: () -> Unit,
@@ -129,6 +138,7 @@ fun GameScreen(
 
     val actions = GameLayoutActions(
         onRecords = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.RECORDS) },
+        onShareScreenshot = { shareScreenshot(context) },
         onFullscreen = { viewModel.setFullscreen(!settings.fullscreen) },
         onSettings = { viewModel.showScreen(com.tainanlins5.minesweeper.AppScreen.SETTINGS) },
         onRestart = { launch(GameConfig(game.difficulty, game.width, game.height, game.mineCount)) },
@@ -259,12 +269,6 @@ fun GameScreen(
                         RetroButton("悔棋(剩餘 ${game.undosRemaining} 次)", colors, onClick = viewModel::undoLoss, modifier = Modifier.fillMaxWidth())
                     }
                     if (!isUndoingLoss) {
-                        RetroButton(
-                            "分享結果",
-                            colors,
-                            onClick = { shareResult(context, game) },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
                         RetroButton("再玩一次", colors, onClick = {
                             viewModel.dismissResultDialog()
                             viewModel.restartGame()
@@ -290,7 +294,15 @@ private fun ClassicGameLayout(
     actions: GameLayoutActions,
 ) {
     Column(Modifier.fillMaxSize().background(colors.desktop).padding(8.dp)) {
-        AppHeader(game, colors, fullscreen, actions.onRecords, actions.onFullscreen, actions.onSettings)
+        AppHeader(
+            game,
+            colors,
+            fullscreen,
+            actions.onRecords,
+            actions.onShareScreenshot,
+            actions.onFullscreen,
+            actions.onSettings,
+        )
         Spacer(Modifier.height(8.dp))
         RetroPanel(colors, Modifier.fillMaxSize()) {
             if (landscape) {
@@ -454,6 +466,13 @@ private fun HandheldToolButtons(colors: RetroColors, fullscreen: Boolean, action
             modifier = Modifier.size(48.dp),
         )
         RetroIconButton(
+            R.drawable.ic_share,
+            contentDescription = "分享畫面",
+            colors = colors,
+            onClick = actions.onShareScreenshot,
+            modifier = Modifier.size(48.dp),
+        )
+        RetroIconButton(
             R.drawable.ic_fullscreen,
             contentDescription = if (fullscreen) "關閉全螢幕" else "開啟全螢幕",
             colors = colors,
@@ -604,6 +623,7 @@ private fun AppHeader(
     colors: RetroColors,
     fullscreen: Boolean,
     onRecords: () -> Unit,
+    onShareScreenshot: () -> Unit,
     onFullscreen: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -623,6 +643,14 @@ private fun AppHeader(
             contentDescription = "遊戲紀錄",
             colors = colors,
             onClick = onRecords,
+            modifier = Modifier.size(48.dp),
+        )
+        Spacer(Modifier.width(6.dp))
+        RetroIconButton(
+            R.drawable.ic_share,
+            contentDescription = "分享畫面",
+            colors = colors,
+            onClick = onShareScreenshot,
             modifier = Modifier.size(48.dp),
         )
         Spacer(Modifier.width(6.dp))
@@ -1162,7 +1190,46 @@ private fun copyResult(context: Context, result: GameResult) {
 
 private fun shareResult(context: Context, result: GameResult) = shareResultText(context, result.shareText())
 
-private fun shareResult(context: Context, game: GameState) = shareResultText(context, game.shareText())
+private fun shareScreenshot(context: Context) {
+    val activity = context.findActivity()
+    if (activity == null) {
+        Toast.makeText(context, "無法取得目前畫面", Toast.LENGTH_SHORT).show()
+        return
+    }
+    val uri = runCatching {
+        val view = activity.window.decorView
+        check(view.width > 0 && view.height > 0)
+        val bitmap = createBitmap(view.width, view.height)
+        view.draw(Canvas(bitmap))
+        val directory = File(activity.cacheDir, "shared_images").apply { mkdirs() }
+        directory.listFiles()?.forEach { it.delete() }
+        val file = File(directory, "minesweeper-${System.currentTimeMillis()}.png")
+        FileOutputStream(file).use { output ->
+            check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, output))
+        }
+        bitmap.recycle()
+        FileProvider.getUriForFile(activity, "${activity.packageName}.fileprovider", file)
+    }.getOrElse {
+        Toast.makeText(context, "無法分享畫面", Toast.LENGTH_SHORT).show()
+        return
+    }
+    runCatching {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        activity.startActivity(Intent.createChooser(intent, "分享遊戲畫面"))
+    }.onFailure {
+        Toast.makeText(context, "無法開啟分享面板", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 private fun shareResultText(context: Context, text: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {

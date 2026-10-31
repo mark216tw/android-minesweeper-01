@@ -49,12 +49,14 @@ enum class SoundEffect {
     LOSE,
 }
 
+internal val DEFAULT_DIFFICULTY = Difficulty.INTERMEDIATE
+
 class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val app = application as MinesweeperApplication
     private val gameRepository = app.gameRepository
     private val settingsRepository = app.settingsRepository
 
-    private val _game = MutableStateFlow(MinesweeperEngine.newGame(Difficulty.BEGINNER))
+    private val _game = MutableStateFlow(MinesweeperEngine.newGame(DEFAULT_DIFFICULTY))
     val game = _game.asStateFlow()
     private val _displayElapsedMillis = MutableStateFlow(0L)
     val displayElapsedMillis = _displayElapsedMillis.asStateFlow()
@@ -387,17 +389,6 @@ fun GameResult.shareText(locale: Locale = Locale.getDefault()): String = buildSh
     mineCount = mineCount,
     elapsedMillis = elapsedMillis,
     endedAtMillis = endedAtMillis,
-    locale = locale,
-)
-
-fun GameState.shareText(locale: Locale = Locale.getDefault()): String = buildShareText(
-    resultType = if (status == GameStatus.WON) ResultType.WON else ResultType.LOST,
-    difficulty = difficulty,
-    width = width,
-    height = height,
-    mineCount = mineCount,
-    elapsedMillis = elapsedMillis,
-    endedAtMillis = System.currentTimeMillis(),
     locale = locale,
 )
 

@@ -627,13 +627,13 @@ private fun AppHeader(
     onFullscreen: () -> Unit,
     onSettings: () -> Unit,
 ) {
-    Row(Modifier.fillMaxWidth().macTitleBar(colors), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().headerChrome(colors), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
-            Text("踩地雷", color = colors.text, fontWeight = FontWeight.Black, fontSize = 24.sp)
-            Text("MINESWEEPER", color = colors.mutedText, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+            Text("踩地雷", color = colors.desktopText, fontWeight = FontWeight.Black, fontSize = 24.sp)
+            Text("MINESWEEPER", color = colors.desktopMutedText, fontWeight = FontWeight.Bold, fontSize = 10.sp)
             Text(
                 "${game.difficulty.label} · ${game.width} × ${game.height} · ${game.mineCount} 雷",
-                color = colors.mutedText,
+                color = colors.desktopMutedText,
                 fontWeight = FontWeight.Bold,
                 fontSize = 10.sp,
             )
@@ -906,12 +906,12 @@ fun RecordsScreen(viewModel: GameViewModel, results: List<GameResult>, colors: R
         when {
             results.isEmpty() -> {
                 Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text("尚無遊戲紀錄", color = colors.mutedText, fontWeight = FontWeight.Bold)
+                    Text("尚無遊戲紀錄", color = colors.desktopMutedText, fontWeight = FontWeight.Bold)
                 }
             }
             filteredResults.isEmpty() -> {
                 Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text("沒有符合條件的紀錄", color = colors.mutedText, fontWeight = FontWeight.Bold)
+                    Text("沒有符合條件的紀錄", color = colors.desktopMutedText, fontWeight = FontWeight.Bold)
                 }
             }
             else -> {
@@ -1023,8 +1023,10 @@ private data class ResultVisual(
     val foreground: Color,
 )
 
+private val MonoResultStyles = setOf(RetroStyle.MACINTOSH, RetroStyle.GAMEBOY, RetroStyle.APPLE2)
+
 private fun resultVisual(resultType: ResultType, colors: RetroColors): ResultVisual {
-    if (colors.style == RetroStyle.MACINTOSH) {
+    if (colors.style in MonoResultStyles) {
         return when (resultType) {
             ResultType.WON -> ResultVisual(R.drawable.ic_result_won, colors.accent, contrastingText(colors.accent))
             ResultType.LOST -> ResultVisual(R.drawable.ic_result_lost, colors.panelDark, contrastingText(colors.panelDark))
@@ -1086,11 +1088,17 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
                     colors,
                     viewModel::setRetroStyle,
                     Modifier.fillMaxWidth(),
+                    itemsPerRow = 2,
                 )
                 Text(
                     when (settings.retroStyle) {
                         RetroStyle.WINDOWS -> "固定天空藍配色"
+                        RetroStyle.WINGREEN -> "Windows 灰搭配經典綠選取色"
                         RetroStyle.MACINTOSH -> "麥金塔風格使用固定黑白配色"
+                        RetroStyle.GAMEBOY -> "Game Boy DMG 四色綠，像素斜邊與點陣質感"
+                        RetroStyle.C64 -> "VIC-II 藍底淺藍字，PETSCII 雙線框"
+                        RetroStyle.FAMICOM -> "奶油機殼配 NES 紅，純黑硬像素描邊"
+                        RetroStyle.APPLE2 -> "P1 磷光綠單色，掃描線與扁平外框"
                     },
                     color = colors.mutedText,
                     fontSize = 12.sp,
@@ -1118,7 +1126,7 @@ fun SettingsScreen(viewModel: GameViewModel, settings: AppSettings, colors: Retr
             }
         }
         RetroButton("玩法說明", colors, onClick = { showHelp = true }, modifier = Modifier.fillMaxWidth())
-        Text("踩地雷 ${BuildConfig.VERSION_NAME}", color = colors.mutedText, modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text("踩地雷 ${BuildConfig.VERSION_NAME}", color = colors.desktopMutedText, modifier = Modifier.align(Alignment.CenterHorizontally))
     }
     if (showHelp) {
         AlertDialog(
@@ -1154,7 +1162,7 @@ private fun ScreenHeader(title: String, colors: RetroColors, onBack: () -> Unit)
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         RetroButton("‹ 返回", colors, onBack)
         Spacer(Modifier.width(12.dp))
-        Text(title, color = colors.text, fontWeight = FontWeight.Black, fontSize = 23.sp)
+        Text(title, color = colors.desktopText, fontWeight = FontWeight.Black, fontSize = 23.sp)
     }
 }
 

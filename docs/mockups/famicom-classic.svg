@@ -1,0 +1,417 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="FAMICOM · 經典版">
+<title>FAMICOM · 經典版</title>
+<defs></defs>
+<rect x="0" y="0" width="390" height="844" fill="#EDE4C5"/>
+<text x="16" y="18" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="8" font-weight="700" text-anchor="start" letter-spacing="1.2">FAMICOM  /  CLASSIC</text>
+<text x="16" y="54" fill="#101010" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="26" font-weight="900" text-anchor="start">踩地雷</text>
+<text x="16" y="69" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start" letter-spacing="1">MINESWEEPER</text>
+<text x="16" y="84" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start">初級 · 9 × 9 · 10 雷</text>
+<text x="16" y="100" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="8" font-weight="700" text-anchor="start" letter-spacing="0.5">© 1983 MINESWEEPER · 1P START</text>
+<rect x="256" y="30" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="258" y="32" width="34" height="1" fill="#FFFFFF"/>
+<rect x="258" y="32" width="1" height="34" fill="#FFFFFF"/>
+<rect x="258" y="65" width="34" height="1" fill="#A8A4A0"/>
+<rect x="291" y="32" width="1" height="34" fill="#A8A4A0"/>
+<circle cx="275" cy="49" r="6.7" fill="none" stroke="#101010" stroke-width="2.2"/>
+<line x1="275" y1="49" x2="275" y2="45.01" stroke="#101010" stroke-width="2.2"/>
+<line x1="275" y1="49" x2="278.51" y2="50.28" stroke="#101010" stroke-width="2.2"/>
+<rect x="296" y="30" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="298" y="32" width="34" height="1" fill="#FFFFFF"/>
+<rect x="298" y="32" width="1" height="34" fill="#FFFFFF"/>
+<rect x="298" y="65" width="34" height="1" fill="#A8A4A0"/>
+<rect x="331" y="32" width="1" height="34" fill="#A8A4A0"/>
+<path d="M307.82,47.4 L307.82,41.82 L313.4,41.82" fill="none" stroke="#101010" stroke-width="2.2"/>
+<path d="M322.18,47.4 L322.18,41.82 L316.6,41.82" fill="none" stroke="#101010" stroke-width="2.2"/>
+<path d="M307.82,50.6 L307.82,56.18 L313.4,56.18" fill="none" stroke="#101010" stroke-width="2.2"/>
+<path d="M322.18,50.6 L322.18,56.18 L316.6,56.18" fill="none" stroke="#101010" stroke-width="2.2"/>
+<rect x="336" y="30" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="338" y="32" width="34" height="1" fill="#FFFFFF"/>
+<rect x="338" y="32" width="1" height="34" fill="#FFFFFF"/>
+<rect x="338" y="65" width="34" height="1" fill="#A8A4A0"/>
+<rect x="371" y="32" width="1" height="34" fill="#A8A4A0"/>
+<circle cx="355" cy="49" r="3.19" fill="none" stroke="#101010" stroke-width="2.2"/>
+<line x1="360.27" y1="49" x2="362.98" y2="49" stroke="#101010" stroke-width="2.2"/>
+<line x1="358.72" y1="52.72" x2="360.64" y2="54.64" stroke="#101010" stroke-width="2.2"/>
+<line x1="355" y1="54.27" x2="355" y2="56.98" stroke="#101010" stroke-width="2.2"/>
+<line x1="351.28" y1="52.72" x2="349.36" y2="54.64" stroke="#101010" stroke-width="2.2"/>
+<line x1="349.73" y1="49" x2="347.02" y2="49" stroke="#101010" stroke-width="2.2"/>
+<line x1="351.28" y1="45.28" x2="349.36" y2="43.36" stroke="#101010" stroke-width="2.2"/>
+<line x1="355" y1="43.73" x2="355" y2="41.02" stroke="#101010" stroke-width="2.2"/>
+<line x1="358.72" y1="45.28" x2="360.64" y2="43.36" stroke="#101010" stroke-width="2.2"/>
+<rect x="16" y="112" width="358" height="68" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="18" y="114" width="354" height="1" fill="#FFFFFF"/>
+<rect x="18" y="114" width="1" height="64" fill="#FFFFFF"/>
+<rect x="18" y="177" width="354" height="1" fill="#A8A4A0"/>
+<rect x="371" y="114" width="1" height="64" fill="#A8A4A0"/>
+<text x="63" y="128" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="middle">剩餘地雷</text>
+<text x="321" y="128" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="middle">時間</text>
+<rect x="28" y="135" width="70" height="32" fill="#000000" stroke="#000000" stroke-width="2"/>
+<rect x="30" y="137" width="66" height="1" fill="#A8A4A0"/>
+<rect x="30" y="137" width="1" height="28" fill="#A8A4A0"/>
+<rect x="30" y="164" width="66" height="1" fill="#FFFFFF"/>
+<rect x="95" y="137" width="1" height="28" fill="#FFFFFF"/>
+<text x="63" y="158.04" fill="#FCFCFC" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="16.64" font-weight="700" text-anchor="middle" letter-spacing="2">010</text>
+<rect x="280" y="135" width="82" height="32" fill="#000000" stroke="#000000" stroke-width="2"/>
+<rect x="282" y="137" width="78" height="1" fill="#A8A4A0"/>
+<rect x="282" y="137" width="1" height="28" fill="#A8A4A0"/>
+<rect x="282" y="164" width="78" height="1" fill="#FFFFFF"/>
+<rect x="359" y="137" width="1" height="28" fill="#FFFFFF"/>
+<text x="321" y="158.04" fill="#FCFCFC" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="16.64" font-weight="700" text-anchor="middle" letter-spacing="2">00:42</text>
+<rect x="173" y="124" width="44" height="44" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="175" y="126" width="40" height="1" fill="#FFFFFF"/>
+<rect x="175" y="126" width="1" height="40" fill="#FFFFFF"/>
+<rect x="175" y="165" width="40" height="1" fill="#A8A4A0"/>
+<rect x="214" y="126" width="1" height="40" fill="#A8A4A0"/>
+<circle cx="195" cy="146" r="11.44" fill="none" stroke="#101010" stroke-width="2"/>
+<circle cx="191.04" cy="143.36" r="1.1" fill="#101010"/>
+<circle cx="198.96" cy="143.36" r="1.1" fill="#101010"/>
+<path d="M189.72,149.52 Q195,155.68 200.28,149.52" fill="none" stroke="#101010" stroke-width="2"/>
+<rect x="16" y="190" width="358" height="358" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="18" y="192" width="354" height="1" fill="#FFFFFF"/>
+<rect x="18" y="192" width="1" height="354" fill="#FFFFFF"/>
+<rect x="18" y="545" width="354" height="1" fill="#A8A4A0"/>
+<rect x="371" y="192" width="1" height="354" fill="#A8A4A0"/>
+<rect x="24" y="198" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="200" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="200" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="233" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="200" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="198" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="200" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="200" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="233" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="200" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="198" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="119" y="225.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="198" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="140" y="200" width="34" height="1" fill="#FFFFFF"/>
+<rect x="140" y="200" width="1" height="34" fill="#FFFFFF"/>
+<rect x="140" y="233" width="34" height="1" fill="#A8A4A0"/>
+<rect x="173" y="200" width="1" height="34" fill="#A8A4A0"/>
+<line x1="154.34" y1="205.6" x2="154.34" y2="226.88" stroke="#D82800" stroke-width="2.66"/>
+<path d="M154.34,205.6 L164.98,210.54 L154.34,215.86 Z" fill="#D82800"/>
+<line x1="148.64" y1="227.64" x2="165.36" y2="227.64" stroke="#D82800" stroke-width="2.66"/>
+<rect x="176" y="198" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="178" y="200" width="34" height="1" fill="#FFFFFF"/>
+<rect x="178" y="200" width="1" height="34" fill="#FFFFFF"/>
+<rect x="178" y="233" width="34" height="1" fill="#A8A4A0"/>
+<rect x="211" y="200" width="1" height="34" fill="#A8A4A0"/>
+<rect x="214" y="198" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="225.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="198" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="271" y="225.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="198" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="309" y="225.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="198" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="200" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="200" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="233" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="200" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="236" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="238" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="238" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="271" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="238" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="236" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="238" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="238" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="271" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="238" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="119" y="263.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="157" y="263.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="195" y="263.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="263.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<circle cx="271" cy="255" r="7.6" fill="#101010"/>
+<line x1="258.08" y1="255" x2="283.92" y2="255" stroke="#101010" stroke-width="2.66"/>
+<line x1="271" y1="242.08" x2="271" y2="267.92" stroke="#101010" stroke-width="2.66"/>
+<line x1="261.86" y1="245.86" x2="280.14" y2="264.14" stroke="#101010" stroke-width="2.66"/>
+<line x1="261.86" y1="264.14" x2="280.14" y2="245.86" stroke="#101010" stroke-width="2.66"/>
+<circle cx="268.34" cy="252.34" r="1.33" fill="#FCFCFC"/>
+<rect x="290" y="236" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="309" y="263.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="236" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="238" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="238" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="271" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="238" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="102" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="102" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="102" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="135" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="138" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="140" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="140" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="140" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="173" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="176" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="178" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="178" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="178" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="211" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="214" y="274" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="301.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="274" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="271" y="301.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="274" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="309" y="301.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="274" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="276" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="276" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="309" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="276" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="312" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="314" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="314" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="347" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="314" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="312" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="314" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="314" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="347" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="314" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="312" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="102" y="314" width="34" height="1" fill="#FFFFFF"/>
+<rect x="102" y="314" width="1" height="34" fill="#FFFFFF"/>
+<rect x="102" y="347" width="34" height="1" fill="#A8A4A0"/>
+<rect x="135" y="314" width="1" height="34" fill="#A8A4A0"/>
+<rect x="138" y="312" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="157" y="339.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="312" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="195" y="339.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="312" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="339.74" fill="#008400" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="252" y="312" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="254" y="314" width="34" height="1" fill="#FFFFFF"/>
+<rect x="254" y="314" width="1" height="34" fill="#FFFFFF"/>
+<rect x="254" y="347" width="34" height="1" fill="#A8A4A0"/>
+<rect x="287" y="314" width="1" height="34" fill="#A8A4A0"/>
+<line x1="268.34" y1="319.6" x2="268.34" y2="340.88" stroke="#D82800" stroke-width="2.66"/>
+<path d="M268.34,319.6 L278.98,324.54 L268.34,329.86 Z" fill="#D82800"/>
+<line x1="262.64" y1="341.64" x2="279.36" y2="341.64" stroke="#D82800" stroke-width="2.66"/>
+<rect x="290" y="312" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="309" y="339.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="312" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="314" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="314" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="347" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="314" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="350" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="352" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="352" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="385" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="352" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="350" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="352" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="352" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="385" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="352" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="350" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="119" y="377.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="350" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="157" y="377.74" fill="#008400" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="176" y="350" width="38" height="38" fill="#D82800" stroke="#D82800" stroke-width="1"/>
+<circle cx="195" cy="369" r="7.6" fill="#000000"/>
+<line x1="182.08" y1="369" x2="207.92" y2="369" stroke="#000000" stroke-width="2.66"/>
+<line x1="195" y1="356.08" x2="195" y2="381.92" stroke="#000000" stroke-width="2.66"/>
+<line x1="185.86" y1="359.86" x2="204.14" y2="378.14" stroke="#000000" stroke-width="2.66"/>
+<line x1="185.86" y1="378.14" x2="204.14" y2="359.86" stroke="#000000" stroke-width="2.66"/>
+<circle cx="192.34" cy="366.34" r="1.33" fill="#FCFCFC"/>
+<rect x="214" y="350" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="377.74" fill="#D82800" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">3</text>
+<rect x="252" y="350" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="271" y="377.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="350" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="309" y="377.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="350" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="352" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="352" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="385" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="352" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="388" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="390" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="390" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="423" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="390" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="388" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="81" y="415.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="388" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="119" y="415.74" fill="#008400" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="138" y="388" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="140" y="390" width="34" height="1" fill="#FFFFFF"/>
+<rect x="140" y="390" width="1" height="34" fill="#FFFFFF"/>
+<rect x="140" y="423" width="34" height="1" fill="#A8A4A0"/>
+<rect x="173" y="390" width="1" height="34" fill="#A8A4A0"/>
+<line x1="154.34" y1="395.6" x2="154.34" y2="416.88" stroke="#D82800" stroke-width="2.66"/>
+<path d="M154.34,395.6 L164.98,400.54 L154.34,405.86 Z" fill="#D82800"/>
+<line x1="148.64" y1="417.64" x2="165.36" y2="417.64" stroke="#D82800" stroke-width="2.66"/>
+<rect x="176" y="388" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="195" y="415.74" fill="#008400" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="214" y="388" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<circle cx="233" cy="407" r="7.6" fill="#101010"/>
+<line x1="220.08" y1="407" x2="245.92" y2="407" stroke="#101010" stroke-width="2.66"/>
+<line x1="233" y1="394.08" x2="233" y2="419.92" stroke="#101010" stroke-width="2.66"/>
+<line x1="223.86" y1="397.86" x2="242.14" y2="416.14" stroke="#101010" stroke-width="2.66"/>
+<line x1="223.86" y1="416.14" x2="242.14" y2="397.86" stroke="#101010" stroke-width="2.66"/>
+<circle cx="230.34" cy="404.34" r="1.33" fill="#FCFCFC"/>
+<rect x="252" y="388" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="271" y="415.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="388" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="292" y="390" width="34" height="1" fill="#FFFFFF"/>
+<rect x="292" y="390" width="1" height="34" fill="#FFFFFF"/>
+<rect x="292" y="423" width="34" height="1" fill="#A8A4A0"/>
+<rect x="325" y="390" width="1" height="34" fill="#A8A4A0"/>
+<rect x="328" y="388" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="390" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="390" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="423" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="390" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="426" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="428" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="428" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="461" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="428" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="81" y="453.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<circle cx="119" cy="445" r="7.6" fill="#101010"/>
+<line x1="106.08" y1="445" x2="131.92" y2="445" stroke="#101010" stroke-width="2.66"/>
+<line x1="119" y1="432.08" x2="119" y2="457.92" stroke="#101010" stroke-width="2.66"/>
+<line x1="109.86" y1="435.86" x2="128.14" y2="454.14" stroke="#101010" stroke-width="2.66"/>
+<line x1="109.86" y1="454.14" x2="128.14" y2="435.86" stroke="#101010" stroke-width="2.66"/>
+<circle cx="116.34" cy="442.34" r="1.33" fill="#FCFCFC"/>
+<rect x="138" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="157" y="453.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="195" y="453.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="233" y="453.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="426" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="271" y="453.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="426" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="292" y="428" width="34" height="1" fill="#FFFFFF"/>
+<rect x="292" y="428" width="1" height="34" fill="#FFFFFF"/>
+<rect x="292" y="461" width="34" height="1" fill="#A8A4A0"/>
+<rect x="325" y="428" width="1" height="34" fill="#A8A4A0"/>
+<rect x="328" y="426" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="428" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="428" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="461" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="428" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="464" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="81" y="491.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="464" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="119" y="491.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="464" width="38" height="38" fill="#DCD6C4" stroke="#101010" stroke-width="1"/>
+<text x="157" y="491.74" fill="#0058F8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="178" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="178" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="178" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="211" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="214" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="216" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="216" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="216" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="249" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="252" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="254" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="254" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="254" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="287" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="290" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="292" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="292" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="292" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="325" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="328" y="464" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="466" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="466" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="499" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="466" width="1" height="34" fill="#A8A4A0"/>
+<rect x="24" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="26" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="26" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="26" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="59" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="62" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="64" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="64" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="64" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="97" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="100" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="102" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="102" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="102" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="135" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="138" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="140" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="140" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="140" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="173" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="176" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="178" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="178" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="178" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="211" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="214" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="216" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="216" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="216" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="249" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="252" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="254" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="254" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="254" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="287" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="290" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="292" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="292" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="292" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="325" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="328" y="502" width="38" height="38" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="330" y="504" width="34" height="1" fill="#FFFFFF"/>
+<rect x="330" y="504" width="1" height="34" fill="#FFFFFF"/>
+<rect x="330" y="537" width="34" height="1" fill="#A8A4A0"/>
+<rect x="363" y="504" width="1" height="34" fill="#A8A4A0"/>
+<rect x="16" y="560" width="114" height="52" fill="#D82800" stroke="#000000" stroke-width="2"/>
+<rect x="18" y="562" width="110" height="1" fill="#FFFFFF"/>
+<rect x="18" y="562" width="1" height="48" fill="#FFFFFF"/>
+<rect x="18" y="609" width="110" height="1" fill="#A8A4A0"/>
+<rect x="127" y="562" width="1" height="48" fill="#A8A4A0"/>
+<text x="73" y="592.24" fill="#FCFCFC" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="13" font-weight="700" text-anchor="middle">✓ 插旗</text>
+<rect x="138" y="560" width="114" height="52" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="140" y="562" width="110" height="1" fill="#FFFFFF"/>
+<rect x="140" y="562" width="1" height="48" fill="#FFFFFF"/>
+<rect x="140" y="609" width="110" height="1" fill="#A8A4A0"/>
+<rect x="249" y="562" width="1" height="48" fill="#A8A4A0"/>
+<text x="195" y="592.24" fill="#101010" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="13" font-weight="700" text-anchor="middle">置中</text>
+<rect x="260" y="560" width="114" height="52" fill="#FCFCFC" stroke="#000000" stroke-width="2"/>
+<rect x="262" y="562" width="110" height="1" fill="#FFFFFF"/>
+<rect x="262" y="562" width="1" height="48" fill="#FFFFFF"/>
+<rect x="262" y="609" width="110" height="1" fill="#A8A4A0"/>
+<rect x="371" y="562" width="1" height="48" fill="#A8A4A0"/>
+<text x="317" y="592.24" fill="#101010" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="13" font-weight="700" text-anchor="middle">新遊戲</text>
+<text x="16" y="632" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start" letter-spacing="0.5">STYLE 05 · FAMICOM</text>
+<text x="374" y="632" fill="#7B7054" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="400" text-anchor="end">操作位置不變</text>
+</svg>

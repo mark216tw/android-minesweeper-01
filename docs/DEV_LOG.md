@@ -4,6 +4,102 @@
 
 ---
 
+## 2026-11-01 - 移除五款風格與更名（併入 1.5.0）
+
+### 目標
+移除 Windows 3.1、Windows 95/98、Windows 2000/XP、IBM CGA/DOS 與 ZX Spectrum 五款風格;「Windows 灰（綠）」更名為「Windows 灰綠」。
+
+### 變更
+- `data/SettingsRepository.kt`:移除 `WIN31`、`WIN98`、`WIN2K`、`DOS`、`ZXSPECTRUM`;`WINGREEN` 標籤改為「Windows 灰綠」。舊設定若存有已移除風格,`decodeRetroStyle` 自動回退 `WINDOWS`。
+- `ui/MinesweeperTheme.kt`:移除五組色盤函式與 `retroColors()` 對應分支。
+- `ui/RetroComponents.kt`:`RetroFrame` 移除 `THINBEVEL`、`DIALOG`、`SHADOWBLOCK`(已無風格使用);`headerChrome` 移除 WIN31 藏青標題列分支。
+- `ui/Screens.kt`:風格說明移除五款,調整 Windows 灰綠說明文字。
+- `app/src/test/.../data/RetroStyleTest.kt`:測試同步調整,新增「已移除風格回退 Windows」案例。
+- `docs/mockups/generate_mockups.py`:移除五款設定檔、`thinbevel` 邊框與標題列 chrome;STYLE 編號重編(01–10);`Windows 灰綠` 更名。
+- `docs/mockups/`:重生成 20 張 SVG 與 20 張 PNG(5 風格 × 2 版型 × 2 明暗),刪除 20 張 SVG 與 20 張 PNG 廢棄檔;`index.html` 改為 5 個風格區塊 + 麥金塔參考區。
+- `docs/USER_GUIDE.md`、`README.md`、`docs/CHANGELOG.md`、`docs/RELEASE_NOTES.md`:同步七種風格與更名。
+
+### 問題與解法
+- 移除 enum 值後既有使用者可能殘留已移除的 `retro_style` 設定,沿用寬鬆解碼(`runCatching` + 回退 `WINDOWS`)不需資料移轉,並以測試固定此行為。
+- 設計稿產生器的 STYLE 編號與邊框語言跟著重編與刪除,避免留下無引用的死碼。
+
+### 待辦／已知限制
+- 尚未實機檢視 7 風格 × 2 版型 × 明暗的視覺呈現;此模型無法目視檢視 PNG,設計稿僅做結構驗證。
+
+## 2026-11-01 - v1.5.0 續（對比修正與 Windows 系列，併入 1.5.0）
+
+### 目標
+修正 Commodore 64、IBM CGA/DOS、ZX Spectrum 淺色模式文字不清的問題;新增四款 Windows 灰系列風格(Windows 灰（綠）、Windows 3.1、Windows 95/98、Windows 2000/XP),設計稿與 App 一次到位。
+
+### 變更
+- `ui/MinesweeperTheme.kt`:`RetroColors` 新增 `desktopText`、`desktopMutedText` 語意色;C64 淺色文字改亮(`#B1A7E3`)、DOS 淺色輔助文字與格面加深調亮、ZX 淺色數字改深色墨色並改反白選取;DOS/ZX 深色數字 1 調亮、紅白機綠色數字調暗;`colorFromHue` 改純 Kotlin 實作(JVM 可測)。
+- `ui/MinesweeperTheme.kt`:新增 `winGreenColors`、`win31Colors`、`win98Colors`、`win2kColors` 四組淺/深色盤與 `retroColors()` 分支;Windows 系列數字採「調暗版經典配色」兼顧經典感與對比。
+- `data/SettingsRepository.kt`:`RetroStyle` 新增 `WINGREEN`、`WIN31`、`WIN98`、`WIN2K`(依 Windows 家族排序於 `WINDOWS` 之後)。
+- `ui/RetroComponents.kt`:`RetroFrame` 新增 `THINBEVEL`(Windows 3.1 平面細斜邊);`macTitleBar` 擴充更名為 `headerChrome`,WIN31 於主畫面標頭繪製藏青標題列。
+- `ui/Screens.kt`:置於桌面背景的四處文字(主畫面標頭、頁面標題、空紀錄提示、版本文字)改用 `desktopText`／`desktopMutedText`;風格說明補四款。
+- `app/src/test/.../ui/RetroPaletteContrastTest.kt`:新增對比回歸測試(12 風格 × 明暗:主文字 ≥4.5、輔助 ≥3、數字 ≥2.5、選取字與顯示字 ≥3;Windows 灰經典數字配色豁免)。
+- `docs/mockups/generate_mockups.py`:新增四款 Windows 設定檔、`thinbevel` 邊框、藏青標題列、選取態按鈕與 accent 色片、桌布文字色;同步對比修正色盤;移除既有稿保護,統一重生成。
+- `docs/mockups/`:重生成 40 張 SVG 與 40 張 PNG(10 風格 × 2 版型 × 2 明暗,含 gameboy 原稿重生成以呈現選取態),`index.html` 改為 10 個風格區塊 + 麥金塔參考區。
+- `docs/USER_GUIDE.md`、`README.md`、`docs/CHANGELOG.md`、`docs/RELEASE_NOTES.md`:同步十二種風格與可讀性修正說明。
+
+### 問題與解法
+- C64 淺色亮藍字對藍底僅 2.3:1,DOS 淺色深字壓在藍色桌布、亮綠/青數字在灰格面近乎隱形;以對比度實測逐組調整色值,並以 `RetroPaletteContrastTest` 防止回歸。
+- `RetroColors` 原本沒有「桌面上的文字」語意色,深色桌布(DOS 藍幕、95/98 湖水綠、2000/XP 經典藍)標頭會不可讀;新增 `desktopText`/`desktopMutedText`,多數風格等於 text/mutedText,行為不變。
+- Windows 灰（綠）與現有 Windows 灰僅差 accent,設計稿加入選取態按鈕(✓ 插旗)與 accent 色片才能呈現差異;gameboy 原稿一併重生成維持全風格一致。
+- 對比測試發現 DOS 深色輔助文字(2.8:1)與紅白機淺色 2/6 號數字(2.2:1)不足,一併微調。
+
+### 待辦／已知限制
+- 尚未實機檢視 12 風格 × 2 版型 × 明暗的視覺呈現;此模型無法目視檢視 PNG,設計稿僅做結構驗證。
+- Windows 3.1 標題列目前只套用於經典版主畫面標頭(比照麥金塔條紋標題列的範圍)。
+
+## 2026-11-01 - v1.5.0（versionCode 11）
+
+### 目標
+復古風格一次加入全部六款候選風格（Game Boy 綠、Commodore 64、IBM CGA/DOS、紅白機、ZX Spectrum、Apple II 綠幕），各含淺色與深色變體，操作按鈕位置不變。
+
+### 變更
+- `data/SettingsRepository.kt`：`RetroStyle` 新增 `GAMEBOY`、`C64`、`DOS`、`FAMICOM`、`ZXSPECTRUM`、`APPLE2` 六個列舉值；持久化以名稱編碼，舊資料免移轉。
+- `ui/MinesweeperTheme.kt`：新增 `retroPalette()` 色盤建構器與六組風格淺色／深色色盤（對照 `docs/mockups/` 設計稿），並擴充 `retroColors()` 分支。
+- `ui/RetroComponents.kt`：新增 `RetroFrame` 與共用 `drawRetroFrame()`，支援像素斜邊／扁平外框／PETSCII 雙線框／DOS 對話框投影／純黑硬像素描邊／硬陰影視窗六種邊框語言；`raisedBorder()`、`sunkenBorder()` 改用它；`ChoiceRow` 支援 `itemsPerRow` 多欄排版。
+- `ui/GameBoard.kt`：未翻開格子的描邊改用 `drawRetroFrame(embedded = true)`，取代原本的麥金塔／斜邊二分分支。
+- `ui/Screens.kt`：設定頁風格說明補上六款；「復古風格」選項改兩欄排版；遊戲紀錄勝敗標籤在單色風格（麥金塔、Game Boy 綠、Apple II 綠幕）改用單色。
+- `app/src/test/.../data/RetroStyleTest.kt`：新增六款風格解碼、標籤唯一性與全枚舉可還原測試。
+- `app/build.gradle.kts`：`versionCode` 11、`versionName` 1.5.0。
+- `docs/USER_GUIDE.md`、`README.md`、`docs/CHANGELOG.md`、`docs/RELEASE_NOTES.md`：同步更新八種風格說明。
+
+### 問題與解法
+- 六款風格的邊框語言各不相同，將描邊抽成單一 `DrawScope.drawRetroFrame()`，共用於元件（按鈕、面板、顯示器）與棋盤格子；格子以 `embedded` 參數把硬陰影改畫在格內，避免被相鄰格子覆蓋。
+- 八種風格選項在單列會過度擠壓，`ChoiceRow` 新增 `itemsPerRow`，復古風格以兩欄四列呈現，其餘選項維持單列。
+- 麥金塔與 Windows 灰的既有繪製路徑以 `BEVEL`、`OUTLINE` 對應保留，輸出與原本一致。
+
+### 待辦／已知限制
+- 尚未實機檢視七種風格 × 兩種版型 × 明暗模式的視覺呈現。
+- ZX Spectrum 彩虹載入條、DOS 選單列等設計稿裝飾未搬進 App（維持操作介面位置不變）。
+
+### 發布
+- 已建置 `app/build/outputs/apk/prerelease/app-prerelease.apk`（versionCode 11、versionName 1.5.0-prerelease）。
+- 發布 GitHub Release `v1.5.0-prerelease`，並上傳上述 APK。
+
+## 2026-11-01 - 復古風格候選設計稿（未發版）
+
+### 目標
+為「復古風格增加 2 種風格」先行完成 6 種候選風格（Game Boy 綠、Commodore 64、IBM CGA/DOS、紅白機 Famicom、ZX Spectrum、Apple II 綠幕）的視覺設計稿，涵蓋經典版／復古掌機版 × 淺色／深色，供挑選 2 種後進入 App 程式實作。
+
+### 變更
+- `docs/mockups/generate_mockups.py`：新增設計稿產生器；以共用 9×9 展示盤面與既有 mockup 實測骨架座標輸出各風格 SVG，色盤以語意色彩欄位統一管理，並同步產生 `index.html`。
+- `docs/mockups/`：新增 Game Boy 綠（僅深色）、Commodore 64、IBM CGA/DOS、紅白機 Famicom、ZX Spectrum、Apple II 綠幕共 22 張 SVG 與 22 張 PNG（780×1688）；既有 gameboy／macintosh 淺色稿不變。
+- `docs/mockups/index.html`：改寫為 6 種候選風格總覽，每種含風格說明、淺／深色色盤 hex 表與四圖比較；麥金塔單色改列參考區。
+
+### 問題與解法
+- 各風格邊框語言不同，產生器將邊框抽成 6 種繪製函式（像素斜邊／硬描邊／PETSCII 雙線框／DOS 對話框投影／ZX 硬陰影／扁平外框），供實作階段對應 `RetroComponents`、`GameBoard` 的繪製分支。
+- PNG 以 headless Chrome（`--force-device-scale-factor=2`）自 SVG 匯出 780×1688，與既有 mockup 尺寸一致。
+- 產生器預設不覆寫既有 gameboy 淺色兩張原稿，需 `--force` 才重寫；重跑輸出可重現。
+
+### 待辦／已知限制
+- 尚未挑選 2 種風格，App 程式未做任何變動；挑選後需實作 `RetroStyle` enum、`MinesweeperTheme` 色盤、邊框分支、`Screens.kt` 風格說明與 `ChoiceRow` 四選項排版。
+- 設計稿僅做結構驗證（XML、尺寸、盤面比對），尚未人工目視確認渲染結果。
+- 深色稿與既有淺色原稿的圖形浮點座標有 0.1px 內的格式差異，視覺等價。
+
 ## 2026-10-31 - v1.4.2（versionCode 10）
 
 ### 目標

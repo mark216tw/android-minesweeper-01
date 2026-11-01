@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.tainanlins5.minesweeper.data.RetroStyle
 import com.tainanlins5.minesweeper.domain.Cell
 import com.tainanlins5.minesweeper.domain.GameStatus
 import kotlin.math.floor
@@ -215,17 +214,15 @@ private fun DrawScope.drawCell(
         }
     } else {
         drawRect(colors.panel, topLeft, Size(size, size))
-        if (colors.style == RetroStyle.MACINTOSH) {
-            drawRect(colors.text, topLeft, Size(size, size), style = Stroke(1f))
-            drawLine(colors.panelLight, topLeft + Offset(1f, 1f), Offset(topLeft.x + size - 1f, topLeft.y + 1f), 1f)
-            drawLine(colors.panelLight, topLeft + Offset(1f, 1f), Offset(topLeft.x + 1f, topLeft.y + size - 1f), 1f)
-        } else {
-            val bevel = (size * 0.11f).coerceAtLeast(2f)
-            drawLine(colors.panelLight, topLeft, Offset(topLeft.x + size, topLeft.y), bevel)
-            drawLine(colors.panelLight, topLeft, Offset(topLeft.x, topLeft.y + size), bevel)
-            drawLine(colors.panelDark, Offset(topLeft.x, topLeft.y + size), Offset(topLeft.x + size, topLeft.y + size), bevel)
-            drawLine(colors.panelDark, Offset(topLeft.x + size, topLeft.y), Offset(topLeft.x + size, topLeft.y + size), bevel)
-        }
+        drawRetroFrame(
+            colors = colors,
+            topLeft = topLeft,
+            width = size,
+            height = size,
+            thickness = (size * 0.11f).coerceAtLeast(2f),
+            raised = true,
+            embedded = true,
+        )
         if (cell.isFlagged) drawFlag(topLeft, size, colors.flagColor)
         if (showWrongFlag) {
             drawLine(colors.wrongFlagColor, topLeft + Offset(size * 0.2f, size * 0.2f), topLeft + Offset(size * 0.8f, size * 0.8f), size * 0.1f)

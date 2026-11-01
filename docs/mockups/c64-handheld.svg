@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" role="img" aria-label="COMMODORE 64 · 復古掌機版">
+<title>COMMODORE 64 · 復古掌機版</title>
+<defs></defs>
+<rect x="0" y="0" width="390" height="844" fill="#6C5EB5"/>
+<rect x="8" y="8" width="374" height="828" fill="#352879"/>
+<text x="16" y="18" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="8" font-weight="700" text-anchor="start" letter-spacing="1.2">COMMODORE 64  /  HANDHELD</text>
+<text x="16" y="54" fill="#B1A7E3" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="26" font-weight="900" text-anchor="start">踩地雷</text>
+<text x="16" y="69" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start" letter-spacing="1">MINESWEEPER</text>
+<text x="16" y="84" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start">初級 · 9 × 9 · 10 雷</text>
+<text x="16" y="100" fill="#959595" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="8" font-weight="700" text-anchor="start" letter-spacing="0.5">64K RAM SYSTEM · 38911 BASIC BYTES FREE  READY.</text>
+<rect x="256" y="30" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="260" y="34" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="275" cy="49" r="6.7" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="275" y1="49" x2="275" y2="45.01" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="275" y1="49" x2="278.51" y2="50.28" stroke="#B1A7E3" stroke-width="2.2"/>
+<rect x="296" y="30" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="300" y="34" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<path d="M307.82,47.4 L307.82,41.82 L313.4,41.82" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<path d="M322.18,47.4 L322.18,41.82 L316.6,41.82" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<path d="M307.82,50.6 L307.82,56.18 L313.4,56.18" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<path d="M322.18,50.6 L322.18,56.18 L316.6,56.18" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<rect x="336" y="30" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="340" y="34" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="355" cy="49" r="3.19" fill="none" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="360.27" y1="49" x2="362.98" y2="49" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="358.72" y1="52.72" x2="360.64" y2="54.64" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="355" y1="54.27" x2="355" y2="56.98" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="351.28" y1="52.72" x2="349.36" y2="54.64" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="349.73" y1="49" x2="347.02" y2="49" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="351.28" y1="45.28" x2="349.36" y2="43.36" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="355" y1="43.73" x2="355" y2="41.02" stroke="#B1A7E3" stroke-width="2.2"/>
+<line x1="358.72" y1="45.28" x2="360.64" y2="43.36" stroke="#B1A7E3" stroke-width="2.2"/>
+<rect x="16" y="112" width="358" height="68" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="20" y="116" width="350" height="60" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<text x="63" y="128" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="middle">剩餘地雷</text>
+<text x="321" y="128" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="middle">時間</text>
+<rect x="28" y="135" width="70" height="32" fill="#1D1542" stroke="#1D1542" stroke-width="2"/>
+<rect x="32" y="139" width="62" height="24" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<text x="63" y="158.04" fill="#B8C76F" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="16.64" font-weight="700" text-anchor="middle" letter-spacing="2">010</text>
+<rect x="280" y="135" width="82" height="32" fill="#1D1542" stroke="#1D1542" stroke-width="2"/>
+<rect x="284" y="139" width="74" height="24" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<text x="321" y="158.04" fill="#B8C76F" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="16.64" font-weight="700" text-anchor="middle" letter-spacing="2">00:42</text>
+<rect x="173" y="124" width="44" height="44" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="177" y="128" width="36" height="36" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="195" cy="146" r="11.44" fill="none" stroke="#B1A7E3" stroke-width="2"/>
+<circle cx="191.04" cy="143.36" r="1.1" fill="#B1A7E3"/>
+<circle cx="198.96" cy="143.36" r="1.1" fill="#B1A7E3"/>
+<path d="M189.72,149.52 Q195,155.68 200.28,149.52" fill="none" stroke="#B1A7E3" stroke-width="2"/>
+<rect x="16" y="190" width="358" height="358" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="20" y="194" width="350" height="350" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="198" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="202" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="198" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="202" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="198" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="119" y="225.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="198" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="142" y="202" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<line x1="154.34" y1="205.6" x2="154.34" y2="226.88" stroke="#B8C76F" stroke-width="2.66"/>
+<path d="M154.34,205.6 L164.98,210.54 L154.34,215.86 Z" fill="#B8C76F"/>
+<line x1="148.64" y1="227.64" x2="165.36" y2="227.64" stroke="#B8C76F" stroke-width="2.66"/>
+<rect x="176" y="198" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="180" y="202" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="214" y="198" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="225.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="198" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="271" y="225.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="198" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="309" y="225.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="198" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="202" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="236" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="240" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="236" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="240" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="119" y="263.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="157" y="263.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="195" y="263.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="263.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="271" cy="255" r="7.6" fill="#B1A7E3"/>
+<line x1="258.08" y1="255" x2="283.92" y2="255" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="271" y1="242.08" x2="271" y2="267.92" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="261.86" y1="245.86" x2="280.14" y2="264.14" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="261.86" y1="264.14" x2="280.14" y2="245.86" stroke="#B1A7E3" stroke-width="2.66"/>
+<circle cx="268.34" cy="252.34" r="1.33" fill="#FFFFFF"/>
+<rect x="290" y="236" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="309" y="263.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="236" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="240" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="104" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="138" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="142" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="176" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="180" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="214" y="274" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="301.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="274" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="271" y="301.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="274" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="309" y="301.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="274" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="278" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="312" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="316" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="312" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="316" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="312" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="104" y="316" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="138" y="312" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="157" y="339.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="312" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="195" y="339.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="312" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="339.74" fill="#9AD284" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="252" y="312" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="256" y="316" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<line x1="268.34" y1="319.6" x2="268.34" y2="340.88" stroke="#B8C76F" stroke-width="2.66"/>
+<path d="M268.34,319.6 L278.98,324.54 L268.34,329.86 Z" fill="#B8C76F"/>
+<line x1="262.64" y1="341.64" x2="279.36" y2="341.64" stroke="#B8C76F" stroke-width="2.66"/>
+<rect x="290" y="312" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="309" y="339.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="312" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="316" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="350" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="354" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="350" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="354" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="350" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="119" y="377.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="350" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="157" y="377.74" fill="#9AD284" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="176" y="350" width="38" height="38" fill="#9A6759" stroke="#9A6759" stroke-width="1"/>
+<circle cx="195" cy="369" r="7.6" fill="#1D1542"/>
+<line x1="182.08" y1="369" x2="207.92" y2="369" stroke="#1D1542" stroke-width="2.66"/>
+<line x1="195" y1="356.08" x2="195" y2="381.92" stroke="#1D1542" stroke-width="2.66"/>
+<line x1="185.86" y1="359.86" x2="204.14" y2="378.14" stroke="#1D1542" stroke-width="2.66"/>
+<line x1="185.86" y1="378.14" x2="204.14" y2="359.86" stroke="#1D1542" stroke-width="2.66"/>
+<circle cx="192.34" cy="366.34" r="1.33" fill="#B8C76F"/>
+<rect x="214" y="350" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="377.74" fill="#B98A7C" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">3</text>
+<rect x="252" y="350" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="271" y="377.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="350" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="309" y="377.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="328" y="350" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="354" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="388" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="392" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="388" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="81" y="415.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="388" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="119" y="415.74" fill="#9AD284" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="138" y="388" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="142" y="392" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<line x1="154.34" y1="395.6" x2="154.34" y2="416.88" stroke="#B8C76F" stroke-width="2.66"/>
+<path d="M154.34,395.6 L164.98,400.54 L154.34,405.86 Z" fill="#B8C76F"/>
+<line x1="148.64" y1="417.64" x2="165.36" y2="417.64" stroke="#B8C76F" stroke-width="2.66"/>
+<rect x="176" y="388" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="195" y="415.74" fill="#9AD284" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">2</text>
+<rect x="214" y="388" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="233" cy="407" r="7.6" fill="#B1A7E3"/>
+<line x1="220.08" y1="407" x2="245.92" y2="407" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="233" y1="394.08" x2="233" y2="419.92" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="223.86" y1="397.86" x2="242.14" y2="416.14" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="223.86" y1="416.14" x2="242.14" y2="397.86" stroke="#B1A7E3" stroke-width="2.66"/>
+<circle cx="230.34" cy="404.34" r="1.33" fill="#FFFFFF"/>
+<rect x="252" y="388" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="271" y="415.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="388" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="294" y="392" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="328" y="388" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="392" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="426" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="430" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="81" y="453.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="119" cy="445" r="7.6" fill="#B1A7E3"/>
+<line x1="106.08" y1="445" x2="131.92" y2="445" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="119" y1="432.08" x2="119" y2="457.92" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="109.86" y1="435.86" x2="128.14" y2="454.14" stroke="#B1A7E3" stroke-width="2.66"/>
+<line x1="109.86" y1="454.14" x2="128.14" y2="435.86" stroke="#B1A7E3" stroke-width="2.66"/>
+<circle cx="116.34" cy="442.34" r="1.33" fill="#FFFFFF"/>
+<rect x="138" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="157" y="453.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="195" y="453.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="214" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="233" y="453.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="252" y="426" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="271" y="453.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="290" y="426" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="294" y="430" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="328" y="426" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="430" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="464" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="81" y="491.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="100" y="464" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="119" y="491.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="138" y="464" width="38" height="38" fill="#2B2062" stroke="#6C5EB5" stroke-width="1"/>
+<text x="157" y="491.74" fill="#9E95E8" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="23.56" font-weight="700" text-anchor="middle">1</text>
+<rect x="176" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="180" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="214" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="218" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="252" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="256" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="290" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="294" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="328" y="464" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="468" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="24" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="28" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="62" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="66" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="100" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="104" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="138" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="142" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="176" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="180" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="214" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="218" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="252" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="256" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="290" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="294" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<rect x="328" y="502" width="38" height="38" fill="#352879" stroke="#6C5EB5" stroke-width="2"/>
+<rect x="332" y="506" width="30" height="30" fill="none" stroke="#6C5EB5" stroke-width="1"/>
+<circle cx="68" cy="594" r="25" fill="#B8C76F" stroke="#6C5EB5" stroke-width="3"/>
+<text x="68" y="601" fill="#1D1542" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="19" font-weight="700" text-anchor="middle">A</text>
+<text x="68" y="638" fill="#B8C76F" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="10" font-weight="700" text-anchor="middle">✓ 插旗</text>
+<circle cx="146" cy="594" r="25" fill="#1D1542" stroke="#6C5EB5" stroke-width="3"/>
+<text x="146" y="601" fill="#B8C76F" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="19" font-weight="700" text-anchor="middle">B</text>
+<text x="146" y="638" fill="#B1A7E3" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="10" font-weight="700" text-anchor="middle">置中</text>
+<rect x="270" y="579" width="96" height="30" fill="#1D1542" stroke="#6C5EB5" stroke-width="2" rx="15"/>
+<text x="318" y="597.9" fill="#B8C76F" font-family="'Courier New','Microsoft JhengHei',monospace" font-size="10" font-weight="700" text-anchor="middle">START</text>
+<text x="318" y="624" fill="#B1A7E3" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="10" font-weight="700" text-anchor="middle">新遊戲</text>
+<text x="16" y="680" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="700" text-anchor="start" letter-spacing="0.5">STYLE 04 · COMMODORE 64</text>
+<text x="374" y="680" fill="#959595" font-family="'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif" font-size="9" font-weight="400" text-anchor="end">操作位置不變</text>
+</svg>

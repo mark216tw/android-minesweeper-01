@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
@@ -19,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -31,30 +35,77 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tainanlins5.minesweeper.data.RetroStyle
 
-fun Modifier.raisedBorder(colors: RetroColors, width: Float = 3f): Modifier = drawBehind {
-    if (colors.style == RetroStyle.MACINTOSH) {
-        drawRect(colors.text, style = Stroke(2f))
-    } else {
-        drawLine(colors.panelLight, Offset(0f, 0f), Offset(size.width, 0f), width)
-        drawLine(colors.panelLight, Offset(0f, 0f), Offset(0f, size.height), width)
-        drawLine(colors.panelDark, Offset(0f, size.height), Offset(size.width, size.height), width)
-        drawLine(colors.panelDark, Offset(size.width, 0f), Offset(size.width, size.height), width)
+enum class RetroFrame { BEVEL, OUTLINE, DOUBLE, HARDPIXEL }
+
+fun retroFrame(style: RetroStyle): RetroFrame = when (style) {
+    RetroStyle.WINDOWS, RetroStyle.WINGREEN, RetroStyle.GAMEBOY -> RetroFrame.BEVEL
+    RetroStyle.MACINTOSH, RetroStyle.APPLE2 -> RetroFrame.OUTLINE
+    RetroStyle.C64 -> RetroFrame.DOUBLE
+    RetroStyle.FAMICOM -> RetroFrame.HARDPIXEL
+}
+
+fun DrawScope.drawRetroFrame(
+    colors: RetroColors,
+    topLeft: Offset,
+    width: Float,
+    height: Float,
+    thickness: Float,
+    raised: Boolean,
+    embedded: Boolean = false,
+) {
+    val size = Size(width, height)
+    val hairline = 1f
+    val line = (thickness * 0.5f).coerceAtLeast(hairline)
+    when (retroFrame(colors.style)) {
+        RetroFrame.BEVEL -> {
+            val hi = if (raised) colors.panelLight else colors.panelDark
+            val lo = if (raised) colors.panelDark else colors.panelLight
+            drawLine(hi, topLeft, topLeft + Offset(width, 0f), thickness)
+            drawLine(hi, topLeft, topLeft + Offset(0f, height), thickness)
+            drawLine(lo, topLeft + Offset(0f, height), topLeft + Offset(width, height), thickness)
+            drawLine(lo, topLeft + Offset(width, 0f), topLeft + Offset(width, height), thickness)
+        }
+        RetroFrame.OUTLINE -> {
+            drawRect(colors.text, topLeft, size, style = Stroke(if (embedded) hairline else 2f))
+            if (embedded) {
+                drawLine(colors.panelLight, topLeft + Offset(1f, 1f), topLeft + Offset(width - 1f, 1f), 2f)
+                drawLine(colors.panelLight, topLeft + Offset(1f, 1f), topLeft + Offset(1f, height - 1f), 2f)
+            }
+        }
+        RetroFrame.DOUBLE -> {
+            val outer = if (raised) colors.text else colors.panelDark
+            drawRect(outer, topLeft, size, style = Stroke(thickness))
+            val inset = thickness + 2f
+            drawRect(
+                colors.text,
+                topLeft + Offset(inset, inset),
+                Size(width - 2 * inset, height - 2 * inset),
+                style = Stroke(hairline),
+            )
+        }
+        RetroFrame.HARDPIXEL -> {
+            drawRect(colors.text, topLeft, size, style = Stroke(thickness))
+            val hi = if (raised) colors.panelLight else colors.panelDark
+            val lo = if (raised) colors.panelDark else colors.panelLight
+            val inset = thickness / 2 + hairline
+            drawLine(hi, topLeft + Offset(inset, inset), topLeft + Offset(width - inset, inset), line)
+            drawLine(hi, topLeft + Offset(inset, inset), topLeft + Offset(inset, height - inset), line)
+            drawLine(lo, topLeft + Offset(inset, height - inset), topLeft + Offset(width - inset, height - inset), line)
+            drawLine(lo, topLeft + Offset(width - inset, inset), topLeft + Offset(width - inset, height - inset), line)
+        }
     }
+}
+
+fun Modifier.raisedBorder(colors: RetroColors, width: Float = 3f): Modifier = drawBehind {
+    drawRetroFrame(colors, Offset.Zero, size.width, size.height, width, raised = true)
 }
 
 fun Modifier.sunkenBorder(colors: RetroColors, width: Float = 3f): Modifier = drawBehind {
-    if (colors.style == RetroStyle.MACINTOSH) {
-        drawRect(colors.text, style = Stroke(2f))
-    } else {
-        drawLine(colors.panelDark, Offset(0f, 0f), Offset(size.width, 0f), width)
-        drawLine(colors.panelDark, Offset(0f, 0f), Offset(0f, size.height), width)
-        drawLine(colors.panelLight, Offset(0f, size.height), Offset(size.width, size.height), width)
-        drawLine(colors.panelLight, Offset(size.width, 0f), Offset(size.width, size.height), width)
-    }
+    drawRetroFrame(colors, Offset.Zero, size.width, size.height, width, raised = false)
 }
 
-fun Modifier.macTitleBar(colors: RetroColors): Modifier = if (colors.style == RetroStyle.MACINTOSH) {
-    drawBehind {
+fun Modifier.headerChrome(colors: RetroColors): Modifier = when (colors.style) {
+    RetroStyle.MACINTOSH -> drawBehind {
         drawRect(colors.panel)
         val stripeGap = 4.dp.toPx()
         val stripeWidth = 1.dp.toPx()
@@ -66,8 +117,7 @@ fun Modifier.macTitleBar(colors: RetroColors): Modifier = if (colors.style == Re
         val bottom = size.height - 1.dp.toPx()
         drawLine(colors.text, Offset(0f, bottom), Offset(size.width, bottom), 2.dp.toPx())
     }
-} else {
-    Modifier
+    else -> Modifier
 }
 
 @Composable
@@ -198,16 +248,23 @@ fun <T> ChoiceRow(
     colors: RetroColors,
     onSelected: (T) -> Unit,
     modifier: Modifier = Modifier,
+    itemsPerRow: Int = values.size,
 ) {
-    Row(modifier, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        values.forEach { value ->
-            RetroButton(
-                text = label(value),
-                colors = colors,
-                onClick = { onSelected(value) },
-                selected = selected == value,
-                modifier = Modifier.weight(1f),
-            )
+    val perRow = itemsPerRow.coerceIn(1, values.size)
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        values.chunked(perRow).forEach { rowValues ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                rowValues.forEach { value ->
+                    RetroButton(
+                        text = label(value),
+                        colors = colors,
+                        onClick = { onSelected(value) },
+                        selected = selected == value,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                repeat(perRow - rowValues.size) { Spacer(Modifier.weight(1f)) }
+            }
         }
     }
 }

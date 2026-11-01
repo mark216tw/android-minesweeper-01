@@ -26,7 +26,12 @@ enum class GameLayout(val label: String) {
 
 enum class RetroStyle(val label: String) {
     WINDOWS("Windows 灰"),
+    WINGREEN("Windows 灰綠"),
     MACINTOSH("麥金塔"),
+    GAMEBOY("Game Boy 綠"),
+    C64("Commodore 64"),
+    FAMICOM("紅白機"),
+    APPLE2("Apple II 綠幕"),
 }
 
 data class AppSettings(

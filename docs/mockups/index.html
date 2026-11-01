@@ -10,48 +10,226 @@
   body { margin: 0; padding: 32px; background: #15171c; color: #f5f5f5; font-family: 'Microsoft JhengHei','Noto Sans TC','Segoe UI',sans-serif; }
   h1 { margin: 0 0 6px; font-size: 26px; }
   p.lead { margin: 0 0 28px; color: #b8bbc4; }
-  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; max-width: 980px; }
-  .card { background: #22252b; border: 1px solid #3a3d45; border-radius: 14px; padding: 16px; }
-  .card h2 { margin: 0 0 2px; font-size: 17px; }
-  .card p { margin: 0 0 12px; color: #b8bbc4; font-size: 13px; line-height: 1.5; }
+  .style { max-width: 980px; margin: 0 0 34px; background: #22252b; border: 1px solid #3a3d45; border-radius: 14px; padding: 18px; }
+  .style h2 { margin: 0 0 4px; font-size: 18px; }
+  .style > p { margin: 0 0 12px; color: #b8bbc4; font-size: 13px; line-height: 1.6; }
+  .style.ref { opacity: 0.75; }
+  .pal { margin: 0 0 14px; font-size: 11px; }
+  .palrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0; }
+  .paltag { width: 42px; color: #b8bbc4; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border: 1px solid #4a4e57; border-radius: 999px; color: #b8bbc4; }
+  .chip i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid #0006; }
+  .chip b { color: #f5f5f5; font-weight: 600; }
+  .shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  figure { margin: 0; }
   .frame { border-radius: 10px; overflow: hidden; background: #0f1014; }
   img { display: block; width: 100%; height: auto; }
-  .tag { display: inline-block; margin-top: 10px; padding: 4px 8px; border: 1px solid #4a4e57; border-radius: 999px; color: #b8bbc4; font-size: 11px; }
-  .note { max-width: 980px; margin-top: 28px; padding: 16px; border-left: 3px solid #8bac0f; background: #1b1e23; color: #c9ccd3; line-height: 1.6; }
+  figcaption { margin-top: 6px; color: #b8bbc4; font-size: 11px; }
+  .note { max-width: 980px; margin-top: 10px; padding: 16px; border-left: 3px solid #8bac0f; background: #1b1e23; color: #c9ccd3; line-height: 1.6; }
 </style>
 </head>
 <body>
   <h1>踩地雷 · 復古風格視覺提案</h1>
-  <p class="lead">Game Boy 綠與麥金塔單色，各自套用在「經典版」與「復古掌機版」。控制按鈕位置不變，只改變配色與材質語言。</p>
-  <div class="grid">
-    <div class="card">
-      <h2>Game Boy 綠 × 經典版</h2>
-      <p>DMG 四色綠、點陣背景、經典三鍵列。適合保留現在的 Windows 操作習慣，只換上掌機螢幕質感。</p>
-      <div class="frame"><img src="gameboy-classic.svg" alt="Game Boy 綠 × 經典版"></div>
-      <span class="tag">STYLE 01</span>
-    </div>
-    <div class="card">
-      <h2>Game Boy 綠 × 復古掌機版</h2>
-      <p>同樣的 DMG 綠，搭配 A / B / START 控制盤，最接近掌機實機的氛圍。</p>
-      <div class="frame"><img src="gameboy-handheld.svg" alt="Game Boy 綠 × 復古掌機版"></div>
-      <span class="tag">STYLE 02</span>
-    </div>
-    <div class="card">
-      <h2>麥金塔單色 × 經典版</h2>
-      <p>System 7 黑白視窗、條紋標題列、單色數字與旗幟。保留經典資訊列與三鍵操作。</p>
-      <div class="frame"><img src="macintosh-classic.svg" alt="麥金塔單色 × 經典版"></div>
-      <span class="tag">STYLE 03</span>
-    </div>
-    <div class="card">
-      <h2>麥金塔單色 × 復古掌機版</h2>
-      <p>Macintosh 視窗語言套用在掌機版配置，A / B / START 仍維持原來的位置。</p>
-      <div class="frame"><img src="macintosh-handheld.svg" alt="麥金塔單色 × 復古掌機版"></div>
-      <span class="tag">STYLE 04</span>
-    </div>
-  </div>
+  <p class="lead">復古風格視覺稿 ×（經典版 / 復古掌機版）×（淺色 / 深色）。控制按鈕位置不變，只改變配色、邊框與質感語言。本批視覺提案已全數實作於 App 1.5.0。</p>
+  <section class="style">
+      <h2>STYLE 01 · Game Boy 綠</h2>
+      <p>DMG 四色綠、點陣背景與像素斜邊，掌機螢幕質感。</p>
+      <div class="pal">
+        <div class="palrow"><span class="paltag">淺色</span><span class="chip"><i style="background:#9BBC0F"></i>底色 <b>#9BBC0F</b></span>
+        <span class="chip"><i style="background:#9BBC0F"></i>面板 <b>#9BBC0F</b></span>
+        <span class="chip"><i style="background:#D8E8A3"></i>亮邊 <b>#D8E8A3</b></span>
+        <span class="chip"><i style="background:#306230"></i>暗邊 <b>#306230</b></span>
+        <span class="chip"><i style="background:#0F380F"></i>顯示井 <b>#0F380F</b></span>
+        <span class="chip"><i style="background:#0F380F"></i>文字 <b>#0F380F</b></span>
+        <span class="chip"><i style="background:#0F380F"></i>旗標 <b>#0F380F</b></span>
+        <span class="chip"><i style="background:#306230"></i>觸雷格 <b>#306230</b></span>
+        <span class="chip"><i style="background:#306230"></i>選取 <b>#306230</b></span><span class="chip"><i style="background:#D8E8A3"></i>選取字 <b>#D8E8A3</b></span></div>
+        <div class="palrow"><span class="paltag">深色</span><span class="chip"><i style="background:#0E1B0C"></i>底色 <b>#0E1B0C</b></span>
+        <span class="chip"><i style="background:#16290F"></i>面板 <b>#16290F</b></span>
+        <span class="chip"><i style="background:#4E7A2E"></i>亮邊 <b>#4E7A2E</b></span>
+        <span class="chip"><i style="background:#050D04"></i>暗邊 <b>#050D04</b></span>
+        <span class="chip"><i style="background:#050D04"></i>顯示井 <b>#050D04</b></span>
+        <span class="chip"><i style="background:#B7E36B"></i>文字 <b>#B7E36B</b></span>
+        <span class="chip"><i style="background:#CDEF8A"></i>旗標 <b>#CDEF8A</b></span>
+        <span class="chip"><i style="background:#3A5A18"></i>觸雷格 <b>#3A5A18</b></span>
+        <span class="chip"><i style="background:#2A4A18"></i>選取 <b>#2A4A18</b></span><span class="chip"><i style="background:#B7E36B"></i>選取字 <b>#B7E36B</b></span></div>
+      </div>
+      <div class="shots"><figure>
+          <div class="frame"><img src="gameboy-classic.svg" alt="Game Boy 綠 × 經典版 · 淺色"></div>
+          <figcaption>STYLE 01 · 經典版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="gameboy-classic-dark.svg" alt="Game Boy 綠 × 經典版 · 深色"></div>
+          <figcaption>STYLE 01 · 經典版 · 深色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="gameboy-handheld.svg" alt="Game Boy 綠 × 復古掌機版 · 淺色"></div>
+          <figcaption>STYLE 02 · 復古掌機版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="gameboy-handheld-dark.svg" alt="Game Boy 綠 × 復古掌機版 · 深色"></div>
+          <figcaption>STYLE 02 · 復古掌機版 · 深色</figcaption>
+        </figure></div>
+    </section><section class="style">
+      <h2>STYLE 03 · Commodore 64</h2>
+      <p>VIC-II 藍底淺藍字、PETSCII 雙線框與電視邊框，家用電腦的靈魂。</p>
+      <div class="pal">
+        <div class="palrow"><span class="paltag">淺色</span><span class="chip"><i style="background:#6C5EB5"></i>電視邊框 <b>#6C5EB5</b></span>
+        <span class="chip"><i style="background:#352879"></i>底色 <b>#352879</b></span>
+        <span class="chip"><i style="background:#352879"></i>面板 <b>#352879</b></span>
+        <span class="chip"><i style="background:#6C5EB5"></i>框線 <b>#6C5EB5</b></span>
+        <span class="chip"><i style="background:#1D1542"></i>顯示井 <b>#1D1542</b></span>
+        <span class="chip"><i style="background:#B1A7E3"></i>文字 <b>#B1A7E3</b></span>
+        <span class="chip"><i style="background:#B8C76F"></i>旗標 <b>#B8C76F</b></span>
+        <span class="chip"><i style="background:#9A6759"></i>觸雷格 <b>#9A6759</b></span>
+        <span class="chip"><i style="background:#B8C76F"></i>選取 <b>#B8C76F</b></span><span class="chip"><i style="background:#1D1542"></i>選取字 <b>#1D1542</b></span></div>
+        <div class="palrow"><span class="paltag">深色</span><span class="chip"><i style="background:#3B3480"></i>電視邊框 <b>#3B3480</b></span>
+        <span class="chip"><i style="background:#241B4E"></i>底色 <b>#241B4E</b></span>
+        <span class="chip"><i style="background:#241B4E"></i>面板 <b>#241B4E</b></span>
+        <span class="chip"><i style="background:#4A3E96"></i>框線 <b>#4A3E96</b></span>
+        <span class="chip"><i style="background:#120C28"></i>顯示井 <b>#120C28</b></span>
+        <span class="chip"><i style="background:#B1A7E3"></i>文字 <b>#B1A7E3</b></span>
+        <span class="chip"><i style="background:#B8C76F"></i>旗標 <b>#B8C76F</b></span>
+        <span class="chip"><i style="background:#6F3D86"></i>觸雷格 <b>#6F3D86</b></span>
+        <span class="chip"><i style="background:#B8C76F"></i>選取 <b>#B8C76F</b></span><span class="chip"><i style="background:#1D1542"></i>選取字 <b>#1D1542</b></span></div>
+      </div>
+      <div class="shots"><figure>
+          <div class="frame"><img src="c64-classic.svg" alt="Commodore 64 × 經典版 · 淺色"></div>
+          <figcaption>STYLE 03 · 經典版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="c64-classic-dark.svg" alt="Commodore 64 × 經典版 · 深色"></div>
+          <figcaption>STYLE 03 · 經典版 · 深色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="c64-handheld.svg" alt="Commodore 64 × 復古掌機版 · 淺色"></div>
+          <figcaption>STYLE 04 · 復古掌機版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="c64-handheld-dark.svg" alt="Commodore 64 × 復古掌機版 · 深色"></div>
+          <figcaption>STYLE 04 · 復古掌機版 · 深色</figcaption>
+        </figure></div>
+    </section><section class="style">
+      <h2>STYLE 05 · 紅白機 Famicom</h2>
+      <p>奶油機殼配 NES 紅，2px 純黑硬描邊與像素高光，卡帶時代的俐落感。</p>
+      <div class="pal">
+        <div class="palrow"><span class="paltag">淺色</span><span class="chip"><i style="background:#EDE4C5"></i>底色 <b>#EDE4C5</b></span>
+        <span class="chip"><i style="background:#FCFCFC"></i>面板 <b>#FCFCFC</b></span>
+        <span class="chip"><i style="background:#FFFFFF"></i>亮邊 <b>#FFFFFF</b></span>
+        <span class="chip"><i style="background:#A8A4A0"></i>暗邊 <b>#A8A4A0</b></span>
+        <span class="chip"><i style="background:#000000"></i>顯示井 <b>#000000</b></span>
+        <span class="chip"><i style="background:#101010"></i>文字 <b>#101010</b></span>
+        <span class="chip"><i style="background:#D82800"></i>旗標 <b>#D82800</b></span>
+        <span class="chip"><i style="background:#D82800"></i>觸雷格 <b>#D82800</b></span>
+        <span class="chip"><i style="background:#D82800"></i>選取 <b>#D82800</b></span><span class="chip"><i style="background:#FCFCFC"></i>選取字 <b>#FCFCFC</b></span></div>
+        <div class="palrow"><span class="paltag">深色</span><span class="chip"><i style="background:#241E14"></i>底色 <b>#241E14</b></span>
+        <span class="chip"><i style="background:#332B1E"></i>面板 <b>#332B1E</b></span>
+        <span class="chip"><i style="background:#57503C"></i>亮邊 <b>#57503C</b></span>
+        <span class="chip"><i style="background:#12100A"></i>暗邊 <b>#12100A</b></span>
+        <span class="chip"><i style="background:#000000"></i>顯示井 <b>#000000</b></span>
+        <span class="chip"><i style="background:#EDE4C5"></i>文字 <b>#EDE4C5</b></span>
+        <span class="chip"><i style="background:#F83800"></i>旗標 <b>#F83800</b></span>
+        <span class="chip"><i style="background:#F83800"></i>觸雷格 <b>#F83800</b></span>
+        <span class="chip"><i style="background:#F83800"></i>選取 <b>#F83800</b></span><span class="chip"><i style="background:#FCFCFC"></i>選取字 <b>#FCFCFC</b></span></div>
+      </div>
+      <div class="shots"><figure>
+          <div class="frame"><img src="famicom-classic.svg" alt="紅白機 Famicom × 經典版 · 淺色"></div>
+          <figcaption>STYLE 05 · 經典版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="famicom-classic-dark.svg" alt="紅白機 Famicom × 經典版 · 深色"></div>
+          <figcaption>STYLE 05 · 經典版 · 深色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="famicom-handheld.svg" alt="紅白機 Famicom × 復古掌機版 · 淺色"></div>
+          <figcaption>STYLE 06 · 復古掌機版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="famicom-handheld-dark.svg" alt="紅白機 Famicom × 復古掌機版 · 深色"></div>
+          <figcaption>STYLE 06 · 復古掌機版 · 深色</figcaption>
+        </figure></div>
+    </section><section class="style">
+      <h2>STYLE 07 · Apple II 綠幕</h2>
+      <p>P1 磷光綠單色、掃描線紋理與扁平外框，終端機時代的綠色螢幕。</p>
+      <div class="pal">
+        <div class="palrow"><span class="paltag">淺色</span><span class="chip"><i style="background:#0A220A"></i>底色 <b>#0A220A</b></span>
+        <span class="chip"><i style="background:#0A220A"></i>面板 <b>#0A220A</b></span>
+        <span class="chip"><i style="background:#2E9E3F"></i>框線 <b>#2E9E3F</b></span>
+        <span class="chip"><i style="background:#031403"></i>顯示井 <b>#031403</b></span>
+        <span class="chip"><i style="background:#4CFF5E"></i>文字 <b>#4CFF5E</b></span>
+        <span class="chip"><i style="background:#4CFF5E"></i>旗標 <b>#4CFF5E</b></span>
+        <span class="chip"><i style="background:#2E9E3F"></i>觸雷格 <b>#2E9E3F</b></span>
+        <span class="chip"><i style="background:#0F330F"></i>翻開格 <b>#0F330F</b></span>
+        <span class="chip"><i style="background:#4CFF5E"></i>選取 <b>#4CFF5E</b></span><span class="chip"><i style="background:#0A220A"></i>選取字 <b>#0A220A</b></span></div>
+        <div class="palrow"><span class="paltag">深色</span><span class="chip"><i style="background:#030B03"></i>底色 <b>#030B03</b></span>
+        <span class="chip"><i style="background:#030B03"></i>面板 <b>#030B03</b></span>
+        <span class="chip"><i style="background:#1E7A2E"></i>框線 <b>#1E7A2E</b></span>
+        <span class="chip"><i style="background:#010501"></i>顯示井 <b>#010501</b></span>
+        <span class="chip"><i style="background:#35C24A"></i>文字 <b>#35C24A</b></span>
+        <span class="chip"><i style="background:#35C24A"></i>旗標 <b>#35C24A</b></span>
+        <span class="chip"><i style="background:#1E7A2E"></i>觸雷格 <b>#1E7A2E</b></span>
+        <span class="chip"><i style="background:#081C08"></i>翻開格 <b>#081C08</b></span>
+        <span class="chip"><i style="background:#35C24A"></i>選取 <b>#35C24A</b></span><span class="chip"><i style="background:#030B03"></i>選取字 <b>#030B03</b></span></div>
+      </div>
+      <div class="shots"><figure>
+          <div class="frame"><img src="apple2-classic.svg" alt="Apple II 綠幕 × 經典版 · 淺色"></div>
+          <figcaption>STYLE 07 · 經典版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="apple2-classic-dark.svg" alt="Apple II 綠幕 × 經典版 · 深色"></div>
+          <figcaption>STYLE 07 · 經典版 · 深色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="apple2-handheld.svg" alt="Apple II 綠幕 × 復古掌機版 · 淺色"></div>
+          <figcaption>STYLE 08 · 復古掌機版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="apple2-handheld-dark.svg" alt="Apple II 綠幕 × 復古掌機版 · 深色"></div>
+          <figcaption>STYLE 08 · 復古掌機版 · 深色</figcaption>
+        </figure></div>
+    </section><section class="style">
+      <h2>STYLE 09 · Windows 灰綠</h2>
+      <p>Windows 灰搭配經典綠選取色，Win95 換色版。</p>
+      <div class="pal">
+        <div class="palrow"><span class="paltag">淺色</span><span class="chip"><i style="background:#D8D8D8"></i>底色 <b>#D8D8D8</b></span>
+        <span class="chip"><i style="background:#C0C0C0"></i>面板 <b>#C0C0C0</b></span>
+        <span class="chip"><i style="background:#FFFFFF"></i>亮邊 <b>#FFFFFF</b></span>
+        <span class="chip"><i style="background:#707070"></i>暗邊 <b>#707070</b></span>
+        <span class="chip"><i style="background:#000000"></i>顯示井 <b>#000000</b></span>
+        <span class="chip"><i style="background:#171717"></i>文字 <b>#171717</b></span>
+        <span class="chip"><i style="background:#FF2020"></i>旗標 <b>#FF2020</b></span>
+        <span class="chip"><i style="background:#FF5555"></i>觸雷格 <b>#FF5555</b></span>
+        <span class="chip"><i style="background:#0F7A52"></i>選取 <b>#0F7A52</b></span><span class="chip"><i style="background:#FFFFFF"></i>選取字 <b>#FFFFFF</b></span></div>
+        <div class="palrow"><span class="paltag">深色</span><span class="chip"><i style="background:#15171C"></i>底色 <b>#15171C</b></span>
+        <span class="chip"><i style="background:#3A3D45"></i>面板 <b>#3A3D45</b></span>
+        <span class="chip"><i style="background:#686C76"></i>亮邊 <b>#686C76</b></span>
+        <span class="chip"><i style="background:#16181D"></i>暗邊 <b>#16181D</b></span>
+        <span class="chip"><i style="background:#08090B"></i>顯示井 <b>#08090B</b></span>
+        <span class="chip"><i style="background:#F5F5F5"></i>文字 <b>#F5F5F5</b></span>
+        <span class="chip"><i style="background:#FF2020"></i>旗標 <b>#FF2020</b></span>
+        <span class="chip"><i style="background:#FF5555"></i>觸雷格 <b>#FF5555</b></span>
+        <span class="chip"><i style="background:#2E8C64"></i>選取 <b>#2E8C64</b></span><span class="chip"><i style="background:#FFFFFF"></i>選取字 <b>#FFFFFF</b></span></div>
+      </div>
+      <div class="shots"><figure>
+          <div class="frame"><img src="wingreen-classic.svg" alt="Windows 灰綠 × 經典版 · 淺色"></div>
+          <figcaption>STYLE 09 · 經典版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="wingreen-classic-dark.svg" alt="Windows 灰綠 × 經典版 · 深色"></div>
+          <figcaption>STYLE 09 · 經典版 · 深色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="wingreen-handheld.svg" alt="Windows 灰綠 × 復古掌機版 · 淺色"></div>
+          <figcaption>STYLE 10 · 復古掌機版 · 淺色</figcaption>
+        </figure> <figure>
+          <div class="frame"><img src="wingreen-handheld-dark.svg" alt="Windows 灰綠 × 復古掌機版 · 深色"></div>
+          <figcaption>STYLE 10 · 復古掌機版 · 深色</figcaption>
+        </figure></div>
+    </section>
+  <section class="style ref">
+      <h2>參考 · 麥金塔單色（已實作於 1.4.0）</h2>
+      <p>System 7 黑白視窗、條紋標題列、單色數字與旗幟，固定黑白配色，不在本次挑選範圍。</p>
+      <div class="shots">
+        <figure>
+          <div class="frame"><img src="macintosh-classic.svg" alt="麥金塔單色 × 經典版"></div>
+          <figcaption>經典版</figcaption>
+        </figure>
+        <figure>
+          <div class="frame"><img src="macintosh-handheld.svg" alt="麥金塔單色 × 復古掌機版"></div>
+          <figcaption>復古掌機版</figcaption>
+        </figure>
+      </div>
+    </section>
   <div class="note">
     <strong>共同原則：</strong>不改動棋盤、狀態列與操作按鈕的位置；只調整色盤、邊框、顯示器與字體氣質。
-    兩種風格都可再提供淺色／深色變體。這批僅為視覺提案，尚未改動 App 程式。
+    每種風格均含淺色／深色變體。本批視覺提案已全數實作於 App（1.5.0）；
+    SVG 由 <code>generate_mockups.py</code> 產生，可重跑微調。
   </div>
 </body>
 </html>
